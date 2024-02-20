@@ -1,11 +1,11 @@
-import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
+import 'package:flutterflow_ui/flutterflow_ui.dart';
+
 import 'functionpage_widget.dart' show FunctionpageWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:sampleproject/functionpage_model.dart';
 
 class FunctionpageModel extends FlutterFlowModel<FunctionpageWidget> {
   ///  State fields for stateful widgets in this page.
