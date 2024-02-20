@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:user_app/Components/button.dart';
 import 'package:user_app/Components/textfield.dart';
-import 'package:user_app/Models/Api/ApiRequestModels/AuthRequestModels.dart';
+import 'package:user_app/Models/Api/RequestModels/AuthRequestModels.dart';
 import 'package:user_app/Services/request/AuthRequest.dart';
 
 import '../../Models/UserInfo.dart';
@@ -25,7 +25,8 @@ class LoginScreen extends StatelessWidget {
         duration: const Duration(seconds: 2),
       ));
 
-      Navigator.pushNamed(context, '/home');
+      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+      // Navigator.pushNamed(context, '/home');
     } catch (e) {}
   }
 
@@ -91,7 +92,7 @@ class LoginScreen extends StatelessWidget {
                   MyButton(
                       onPressed: () => userRegister(context),
                       text: "Register",
-                      type: MyButtonType.submit)
+                      type: MyButtonType.submit),
                 ],
               )
             ],

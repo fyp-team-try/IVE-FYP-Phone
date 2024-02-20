@@ -15,6 +15,7 @@ class ApiRequest {
     }
     apiUrl = '$baseUrl/$version';
   }
+
   Future<ApiResponse<T>> post<T>(ApiRequestModels data, String endpoint,
       T Function(Object? json) fromJsonT) async {
     try {

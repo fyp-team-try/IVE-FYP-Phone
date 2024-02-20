@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return FutureBuilder(
-                future: context.read<AuthProvider>().getInitialRoute(),
+                future: context.read<AuthProvider>().isLogined(),
                 builder: (context, snapshot) {
                   if (snapshot.data == true) {
                     return HomeScreen();

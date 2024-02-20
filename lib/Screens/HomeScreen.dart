@@ -8,7 +8,8 @@ class HomeScreen extends StatelessWidget {
 
   Future<void> onTap(BuildContext context) async {
     await context.read<FlutterSecureStorage>().delete(key: 'userInfo');
-    Navigator.pushNamed(context, '/login');
+    // Navigator.pushNamed(context, '/login');
+    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
   }
 
   @override

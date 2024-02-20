@@ -22,7 +22,11 @@ class AuthProvider {
     await storage.write(key: 'userInfo', value: UserInfo.serialize(userinfo!));
   }
 
-  Future<bool> getInitialRoute() async {
+  UserInfo getUserInfo() {
+    return userinfo!;
+  }
+
+  Future<bool> isLogined() async {
     if (userinfo != null) {
       return true;
     }
