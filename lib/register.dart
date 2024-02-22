@@ -29,7 +29,7 @@ class _RegisterPageState extends State<RegisterPage> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Error'),
-            content: Text('Please fill in all fields.'),
+            content: Text('Please fill the fields.'),
             actions: [
               TextButton(
                 onPressed: () {
@@ -113,9 +113,29 @@ class _RegisterPageState extends State<RegisterPage> {
               keyboardType: TextInputType.phone,
             ),
             SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: registerUser,
-              child: Text('Register'),
+            Container(
+              margin: EdgeInsets.only(top: 50.0), // Add margin top here
+              child: GestureDetector(
+                onTap: registerUser,
+                child: Container(
+                  padding: const EdgeInsets.all(25),
+                  margin: const EdgeInsets.symmetric(horizontal: 25),
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      "Register",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ),
           ],
         ),

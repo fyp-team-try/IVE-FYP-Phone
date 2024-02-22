@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sampleproject/components/my_button.dart';
 import 'package:sampleproject/components/my_textfield.dart';
 import 'package:sampleproject/register.dart';
+import 'package:sampleproject/functionpage_widget.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -80,7 +81,12 @@ class LoginPage extends StatelessWidget {
 
             //sign in button
             MyButton(
-              onTap: userLogin,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => FunctionpageWidget()),
+                );
+              },
             ),
             const SizedBox(height: 50),
 
