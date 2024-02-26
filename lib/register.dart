@@ -1,4 +1,8 @@
+import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -19,21 +23,25 @@ class _RegisterPageState extends State<RegisterPage> {
     String email = emailController.text;
     String phoneNumber = phoneNumberController.text;
 
-    // Check if any of the fields are empty
-    if (userID.isEmpty ||
-        password.isEmpty ||
-        email.isEmpty ||
-        phoneNumber.isEmpty) {
+    bool inputIsValid = validateInputs(userID, password, email, phoneNumber);
+
+    if (inputIsValid) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Error'),
-            content: Text('Please fill the fields.'),
+            title: Text('Registration Successful'),
+            content: Text('You have successfully registered.'),
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  // Clear the text fields
+                  userIDController.clear();
+                  passwordController.clear();
+                  emailController.clear();
+                  phoneNumberController.clear();
+                  // Navigate back to the login page
+                  Navigator.pushReplacementNamed(context, '/login');
                 },
                 child: Text('OK'),
               ),
@@ -41,34 +49,68 @@ class _RegisterPageState extends State<RegisterPage> {
           );
         },
       );
-      return; // Exit the method if any field is empty
     }
+  }
 
-    // Show a registration success message
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Registration Successful'),
-          content: Text('You have successfully registered.'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                // Clear the text fields
-                userIDController.clear();
-                passwordController.clear();
-                emailController.clear();
-                phoneNumberController.clear();
+  bool validateInputs(
+      String userID, String password, String email, String phoneNumber) {
+    bool isValid = true;
 
-                // Navigate back to the login page
-                Navigator.pushReplacementNamed(context, '/login');
-              },
-              child: Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
+    bool inputsIsEmpty = userID.isEmpty ||
+        password.isEmpty ||
+        email.isEmpty ||
+        phoneNumber.isEmpty;
+    bool hasUpppercase = RegExp(r'[a-z]+').hasMatch(password);
+    bool hasLowercase = RegExp(r'[A-Z]+').hasMatch(password);
+    bool hasNumber = RegExp(r'[0-9]+').hasMatch(password);
+    const minLength = 8;
+
+    isValid = hasUpppercase &&
+        hasLowercase &&
+        hasNumber &&
+        (password.length >= minLength);
+
+    if (!isValid) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+              child: Container(
+                margin: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "• Has at least one Uppercase",
+                      style: TextStyle(
+                          color: hasUpppercase ? Colors.green : Colors.red),
+                    ),
+                    Text(
+                      "• Has at least one Lowercase",
+                      style: TextStyle(
+                          color: hasLowercase ? Colors.green : Colors.red),
+                    ),
+                    Text(
+                      "• Has at least one number",
+                      style: TextStyle(
+                          color: hasNumber ? Colors.green : Colors.red),
+                    ),
+                    Text(
+                      "• Password must be longer than 8 characters",
+                      style: TextStyle(
+                          color: (password.length >= minLength)
+                              ? Colors.green
+                              : Colors.red),
+                    )
+                  ],
+                ),
+              ),
+            );
+          });
+      return false;
+    }
+    return isValid;
   }
 
   @override
