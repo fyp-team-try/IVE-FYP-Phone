@@ -3,6 +3,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:user_app/Providers/AuthProvider.dart';
+import 'package:user_app/Screens/functionpage_widget.dart';
+import 'package:user_app/Screens/register.dart';
 
 import 'Screens/Auth/LoginScreen.dart';
 import 'Screens/HomeScreen.dart';
@@ -35,7 +37,7 @@ class MyApp extends StatelessWidget {
                 future: context.read<AuthProvider>().isLogined(),
                 builder: (context, snapshot) {
                   if (snapshot.data == true) {
-                    return HomeScreen();
+                    return FunctionpageWidget();
                   }
                   return LoginScreen();
                 });
@@ -47,6 +49,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/home': (context) => HomeScreen(),
         '/login': (context) => LoginScreen(),
+        '/functions':(context) => FunctionpageWidget(),
+        '/register':(context) => RegisterPage()
       },
     );
   }
