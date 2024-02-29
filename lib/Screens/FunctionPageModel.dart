@@ -1,9 +1,9 @@
 import 'package:flutterflow_ui/flutterflow_ui.dart';
-
-import 'functionpage_widget.dart' show FunctionpageWidget;
+import 'FunctionPageWidget.dart' show FunctionPageWidget;
 import 'package:flutter/material.dart';
 
-class FunctionpageModel extends FlutterFlowModel<FunctionpageWidget> {
+
+class FunctionPageModel extends FlutterFlowModel<FunctionPageWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
