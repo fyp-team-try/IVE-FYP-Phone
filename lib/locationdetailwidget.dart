@@ -128,7 +128,9 @@ class _LocationDetailWidgetState extends State<LocationDetailWidget> {
                     focusColor: Colors.transparent,
                     hoverColor: Colors.transparent,
                     highlightColor: Colors.transparent,
-                    onTap: () async {},
+                    onTap: () async {
+                      context.pushNamed('null');
+                    },
                     child: Container(
                       width: double.infinity,
                       height: 50,
@@ -200,7 +202,9 @@ class _LocationDetailWidgetState extends State<LocationDetailWidget> {
                     focusColor: Colors.transparent,
                     hoverColor: Colors.transparent,
                     highlightColor: Colors.transparent,
-                    onTap: () async {},
+                    onTap: () async {
+                      context.pushNamed('null');
+                    },
                     child: Container(
                       width: double.infinity,
                       height: 50,
@@ -249,7 +253,9 @@ class _LocationDetailWidgetState extends State<LocationDetailWidget> {
                     focusColor: Colors.transparent,
                     hoverColor: Colors.transparent,
                     highlightColor: Colors.transparent,
-                    onTap: () async {},
+                    onTap: () async {
+                      context.pushNamed('null');
+                    },
                     child: Container(
                       width: double.infinity,
                       height: 50,
@@ -336,8 +342,8 @@ class _LocationDetailWidgetState extends State<LocationDetailWidget> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: FFButtonWidget(
-                      onPressed: () {
-                        print('Button pressed ...');
+                      onPressed: () async {
+                        context.pushNamed('Booking');
                       },
                       text: 'Booking Now',
                       options: FFButtonOptions(
@@ -377,8 +383,8 @@ class _LocationDetailWidgetState extends State<LocationDetailWidget> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: FFButtonWidget(
-                      onPressed: () {
-                        print('Button pressed ...');
+                      onPressed: () async {
+                        context.pushNamed('Plan');
                       },
                       text: 'Plan Now',
                       options: FFButtonOptions(
