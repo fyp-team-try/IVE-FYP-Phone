@@ -65,9 +65,7 @@ class _FunctionPageWidgetState extends State<FunctionPageWidget> {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     FunctionPageButton(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/home');
-                        },
+                        onTap: () => testOnTap(),
                         text: "booking",
                         imagePath: "assets/images/booking.png"),
                     FunctionPageButton(
@@ -94,7 +92,7 @@ class _FunctionPageWidgetState extends State<FunctionPageWidget> {
                         text: "Payment",
                         imagePath: "assets/images/payment.png"),
                     FunctionPageButton(
-                        onTap: () => testOnTap(),
+                        onTap: (){Navigator.pushNamed(context, "/home");},
                         text: "Setting",
                         imagePath: "assets/images/settings.png"),
                   ],

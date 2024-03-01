@@ -26,6 +26,7 @@ class _RegisterPageState extends State<RegisterPage> {
     bool inputIsValid = validateInputs(userID, password, email, phoneNumber);
 
     if (inputIsValid) {
+      print('Test');
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -70,6 +71,27 @@ class _RegisterPageState extends State<RegisterPage> {
         hasNumber &&
         (password.length >= minLength);
 
+    if (inputsIsEmpty) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('Please fill in all fields.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+      return false;
+    }
+
     if (!isValid) {
       showDialog(
           context: context,
@@ -81,6 +103,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    Text(
+                      "Password requirement:",
+                    ),
                     Text(
                       "• Has at least one Uppercase",
                       style: TextStyle(
