@@ -44,3 +44,4 @@ app.*.map.json
 
 
 /assets/.env
+test/widget_test.dart
