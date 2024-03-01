@@ -3,7 +3,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:user_app/Providers/AuthProvider.dart';
-import 'package:user_app/Screens/FunctionPageWidget.dart';
+import 'package:user_app/Screens/FunctionPage/FunctionPageWidget.dart';
+import 'package:user_app/Screens/LocationPage/LocationDetailWidget.dart';
+import 'package:user_app/Screens/LocationPage/searchLocationWidget.dart';
 import 'package:user_app/Screens/register.dart';
 
 import 'Screens/Auth/LoginScreen.dart';
@@ -50,7 +52,9 @@ class MyApp extends StatelessWidget {
         '/home': (context) => HomeScreen(),
         '/login': (context) => LoginScreen(),
         '/functions': (context) => FunctionPageWidget(),
-        '/register': (context) => RegisterPage()
+        '/register': (context) => RegisterPage(),
+        '/location':(context) => SearchLocationWidget(),
+        '/locationDetail':(context) => LocationDetailWidget(),
       },
     );
   }
