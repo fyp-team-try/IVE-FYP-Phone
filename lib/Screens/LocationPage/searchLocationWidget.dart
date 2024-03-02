@@ -1,9 +1,16 @@
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:user_app/Components/LocationListItem.dart';
+import 'package:user_app/Models/ParkingLotInfo.dart';
 
 import 'searchLocationModel.dart';
 export 'searchLocationModel.dart';
+
+import 'package:http/http.dart' as http;
 
 class SearchLocationWidget extends StatefulWidget {
   const SearchLocationWidget({super.key});
@@ -16,21 +23,39 @@ class _SearchLocationWidgetState extends State<SearchLocationWidget> {
   late SearchLocationModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => SearchLocationModel());
-
     _model.textController ??= TextEditingController();
     _model.textFieldFocusNode ??= FocusNode();
+    fetchMediumArticleItems();
   }
 
   @override
   void dispose() {
     _model.dispose();
-
     super.dispose();
+  }
+
+  List<dynamic> items = [];
+  void fetchMediumArticleItems() async {
+    print("Fetch Started");
+    const loadingUrl = "https://fyp.alexchoicy.live/api/v1/parkinglots";
+    final url = Uri.parse(loadingUrl);
+    final response = await http.get(url);
+    final json = jsonDecode(response.body);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(response.statusCode.toString()),
+      ),
+    );
+
+    setState(() {
+      items = json['data'];
+    });
+    print("Fetch Completed");
   }
 
   @override
@@ -201,19 +226,26 @@ class _SearchLocationWidgetState extends State<SearchLocationWidget> {
                     style: FlutterFlowTheme.of(context).labelMedium,
                   ),
                 ),
-                ListView(
-                  padding: EdgeInsets.fromLTRB(
-                    0,
-                    8,
-                    0,
-                    44,
-                  ),
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  children: [
-                    LocationListItem(lotName: "Test lot 1", avalibleSlot: 100, totalSlot: 100)
-                  ],
-                ),
+                items.isEmpty ?Text('null') :ListView.builder(
+                        padding: EdgeInsets.fromLTRB(
+                          0,
+                          8,
+                          0,
+                          44,
+                        ),
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        itemCount: items.length,
+                        itemBuilder: (context, index) {
+                          final lotName = items[index]['name'];
+                          final totalSpaces = items[index]['totalSpaces'];
+                          final availableSpaces = items[index]['availableSpaces'];
+                          return LocationListItem(
+                            lotName: lotName,
+                            avalibleSlot: availableSpaces,
+                            totalSlot: totalSpaces,
+                          );
+                        }),
               ],
             ),
           ),

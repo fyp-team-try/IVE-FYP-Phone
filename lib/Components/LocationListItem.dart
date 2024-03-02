@@ -3,11 +3,13 @@ import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
 
 class LocationListItem extends StatelessWidget {
+  //final Function()? onPress;
   final String lotName;
   final int avalibleSlot;
   final int totalSlot;
 
   const LocationListItem({
+    //required this.onPress,
     required this.lotName,
     required this.avalibleSlot,
     required this.totalSlot,
@@ -20,8 +22,8 @@ class LocationListItem extends StatelessWidget {
       focusColor: Colors.transparent,
       hoverColor: Colors.transparent,
       highlightColor: Colors.transparent,
-      onTap: () async {
-        Navigator.pushNamed(context, '/locationDetail');
+      onTap: () {
+        Navigator.pushNamed(context,'/locationDetail');
       },
       child: Container(
         width: 100,
