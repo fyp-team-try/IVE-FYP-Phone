@@ -226,7 +226,7 @@ class _SearchLocationWidgetState extends State<SearchLocationWidget> {
                     style: FlutterFlowTheme.of(context).labelMedium,
                   ),
                 ),
-                items.isEmpty ?Text('null') :ListView.builder(
+                items.isEmpty ?Center(child: CircularProgressIndicator()) :ListView.builder(
                         padding: EdgeInsets.fromLTRB(
                           0,
                           8,
@@ -238,11 +238,11 @@ class _SearchLocationWidgetState extends State<SearchLocationWidget> {
                         itemCount: items.length,
                         itemBuilder: (context, index) {
                           final lotName = items[index]['name'];
-                          final totalSpaces = items[index]['totalSpaces'];
-                          final availableSpaces = items[index]['availableSpaces'];
+                          final totalSpaces = items[index]['availableRegularSpaces']+items[index]['availableElectricSpaces'];
+                          final availableSpaces = items[index]['regularSpaces']+items[index]['electricSpaces'];
                           return LocationListItem(
                             lotName: lotName,
-                            avalibleSlot: availableSpaces,
+                            avalibleSlot:availableSpaces,
                             totalSlot: totalSpaces,
                           );
                         }),

@@ -75,9 +75,9 @@ class LocationListItem extends StatelessWidget {
                           children: [
                             Padding(
                               padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 0, 12, 0),
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                               child: Text(
-                                'Existing parking space',
+                                'Existing parking space:',
                                 style: FlutterFlowTheme.of(context)
                                     .labelSmall
                                     .override(
