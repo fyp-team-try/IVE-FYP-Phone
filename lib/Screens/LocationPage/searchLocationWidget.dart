@@ -38,24 +38,25 @@ class _SearchLocationWidgetState extends State<SearchLocationWidget> {
     super.dispose();
   }
 
-  List<dynamic> items = [];
+  List<ParkingLotInfo> items = List.empty();
   void fetchMediumArticleItems() async {
-    print("Fetch Started");
-    const loadingUrl = "https://fyp.alexchoicy.live/api/v1/parkinglots";
-    final url = Uri.parse(loadingUrl);
-    final response = await http.get(url);
-    final json = jsonDecode(response.body);
+    try {
+      const loadingUrl = "https://fyp.alexchoicy.live/api/v1/parkinglots";
+      final url = Uri.parse(loadingUrl);
+      final response = await http.get(url);
+      final json = jsonDecode(response.body);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(response.statusCode.toString()),
-      ),
-    );
-
-    setState(() {
-      items = json['data'];
-    });
-    print("Fetch Completed");
+      setState(() {
+        items = json['data'].map<ParkingLotInfo>((dynamic item) {
+          return ParkingLotInfo.fromJson(item);
+        }).toList();
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(e.toString()),
+        duration: Duration(seconds: 5),
+      ));
+    }
   }
 
   @override
@@ -226,7 +227,9 @@ class _SearchLocationWidgetState extends State<SearchLocationWidget> {
                     style: FlutterFlowTheme.of(context).labelMedium,
                   ),
                 ),
-                items.isEmpty ?Center(child: CircularProgressIndicator()) :ListView.builder(
+                items.isEmpty
+                    ? Center(child: CircularProgressIndicator())
+                    : ListView.builder(
                         padding: EdgeInsets.fromLTRB(
                           0,
                           8,
@@ -237,12 +240,15 @@ class _SearchLocationWidgetState extends State<SearchLocationWidget> {
                         scrollDirection: Axis.vertical,
                         itemCount: items.length,
                         itemBuilder: (context, index) {
-                          final lotName = items[index]['name'];
-                          final totalSpaces = items[index]['availableRegularSpaces']+items[index]['availableElectricSpaces'];
-                          final availableSpaces = items[index]['regularSpaces']+items[index]['electricSpaces'];
+                          final lotName = items[index].name;
+                          final totalSpaces =
+                              items[index].availableRegularSpaces +
+                                  items[index].availableElectricSpaces;
+                          final availableSpaces = items[index].regularSpaces +
+                              items[index].electricSpaces;
                           return LocationListItem(
                             lotName: lotName,
-                            avalibleSlot:availableSpaces,
+                            avalibleSlot: availableSpaces,
                             totalSlot: totalSpaces,
                           );
                         }),
