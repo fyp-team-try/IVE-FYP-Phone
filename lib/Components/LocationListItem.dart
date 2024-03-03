@@ -1,21 +1,15 @@
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 
 import 'package:flutter/material.dart';
+import 'package:user_app/Models/ParkingLotInfo.dart';
 import 'package:user_app/Screens/LocationPage/LocationDetailWidget.dart';
 
 class LocationListItem extends StatelessWidget {
-  //final Function()? onPress;
-  final String lotName;
-  final int avalibleSlot;
-  final int totalSlot;
-  final int parkinglotID;
+  final ParkingLotInfo parkingLotInfo;
 
-  const LocationListItem(
-      {
-      required this.lotName,
-      required this.avalibleSlot,
-      required this.totalSlot,
-      required this.parkinglotID});
+  const LocationListItem({
+    required this.parkingLotInfo
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +19,7 @@ class LocationListItem extends StatelessWidget {
       hoverColor: Colors.transparent,
       highlightColor: Colors.transparent,
       onTap: () {
-        Navigator.pushNamed(context, '/locationDetail',arguments: parkinglotID);
+        Navigator.pushNamed(context, '/locationDetail',arguments: parkingLotInfo.lotID);
       },
       child: Container(
         width: 100,
@@ -67,7 +61,7 @@ class LocationListItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        lotName,
+                        parkingLotInfo.name,
                         style: FlutterFlowTheme.of(context).bodyLarge,
                       ),
                       Padding(
@@ -90,7 +84,7 @@ class LocationListItem extends StatelessWidget {
                             ),
                             Expanded(
                               child: Text(
-                                '${avalibleSlot}/${totalSlot}',
+                                '${parkingLotInfo.regularSpaces+parkingLotInfo.electricSpaces}/${parkingLotInfo.availableRegularSpaces+parkingLotInfo.availableElectricSpaces}',
                                 style: FlutterFlowTheme.of(context)
                                     .labelSmall
                                     .override(

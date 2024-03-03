@@ -249,18 +249,7 @@ class _SearchLocationWidgetState extends State<SearchLocationWidget> {
                         itemCount: items.length,
                         itemBuilder: (context, index) {
                           ParkingLotInfo currItem = items[index];
-                          final lotName = currItem.name;
-                          final totalSpaces = currItem.availableRegularSpaces +
-                              currItem.availableElectricSpaces;
-                          final availableSpaces =
-                              currItem.regularSpaces + currItem.electricSpaces;
-                          final parkingLotID = currItem.lotID;
-                          return LocationListItem(
-                            lotName: lotName,
-                            avalibleSlot: availableSpaces,
-                            totalSlot: totalSpaces,
-                            parkinglotID: parkingLotID,
-                          );
+                          return LocationListItem(parkingLotInfo: currItem);
                         }),
               ],
             ),
