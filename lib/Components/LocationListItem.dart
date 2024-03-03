@@ -1,19 +1,21 @@
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 
 import 'package:flutter/material.dart';
+import 'package:user_app/Screens/LocationPage/LocationDetailWidget.dart';
 
 class LocationListItem extends StatelessWidget {
   //final Function()? onPress;
   final String lotName;
   final int avalibleSlot;
   final int totalSlot;
+  final int parkinglotID;
 
-  const LocationListItem({
-    //required this.onPress,
-    required this.lotName,
-    required this.avalibleSlot,
-    required this.totalSlot,
-  });
+  const LocationListItem(
+      {
+      required this.lotName,
+      required this.avalibleSlot,
+      required this.totalSlot,
+      required this.parkinglotID});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class LocationListItem extends StatelessWidget {
       hoverColor: Colors.transparent,
       highlightColor: Colors.transparent,
       onTap: () {
-        Navigator.pushNamed(context,'/locationDetail');
+        Navigator.pushNamed(context, '/locationDetail',arguments: parkinglotID);
       },
       child: Container(
         width: 100,

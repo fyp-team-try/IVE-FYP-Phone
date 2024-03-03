@@ -22,6 +22,8 @@ class SearchLocationWidget extends StatefulWidget {
 class _SearchLocationWidgetState extends State<SearchLocationWidget> {
   late SearchLocationModel _model;
 
+  List<ParkingLotInfo> items = List.empty();
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
@@ -29,7 +31,7 @@ class _SearchLocationWidgetState extends State<SearchLocationWidget> {
     _model = createModel(context, () => SearchLocationModel());
     _model.textController ??= TextEditingController();
     _model.textFieldFocusNode ??= FocusNode();
-    fetchMediumArticleItems();
+    GetParkingLots();
   }
 
   @override
@@ -38,19 +40,25 @@ class _SearchLocationWidgetState extends State<SearchLocationWidget> {
     super.dispose();
   }
 
-  List<ParkingLotInfo> items = List.empty();
-  void fetchMediumArticleItems() async {
+  void GetParkingLots() async {
     try {
       const loadingUrl = "https://fyp.alexchoicy.live/api/v1/parkinglots";
       final url = Uri.parse(loadingUrl);
       final response = await http.get(url);
       final json = jsonDecode(response.body);
 
-      setState(() {
-        items = json['data'].map<ParkingLotInfo>((dynamic item) {
-          return ParkingLotInfo.fromJson(item);
-        }).toList();
-      });
+      if (response.statusCode == 200) {
+        setState(() {
+          items = json['data'].map<ParkingLotInfo>((dynamic item) {
+            return ParkingLotInfo.fromJson(item);
+          }).toList();
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Data Fetch failed'),
+          duration: Duration(seconds: 5),
+        ));
+      }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(e.toString()),
@@ -240,16 +248,18 @@ class _SearchLocationWidgetState extends State<SearchLocationWidget> {
                         scrollDirection: Axis.vertical,
                         itemCount: items.length,
                         itemBuilder: (context, index) {
-                          final lotName = items[index].name;
-                          final totalSpaces =
-                              items[index].availableRegularSpaces +
-                                  items[index].availableElectricSpaces;
-                          final availableSpaces = items[index].regularSpaces +
-                              items[index].electricSpaces;
+                          ParkingLotInfo currItem = items[index];
+                          final lotName = currItem.name;
+                          final totalSpaces = currItem.availableRegularSpaces +
+                              currItem.availableElectricSpaces;
+                          final availableSpaces =
+                              currItem.regularSpaces + currItem.electricSpaces;
+                          final parkingLotID = currItem.lotID;
                           return LocationListItem(
                             lotName: lotName,
                             avalibleSlot: availableSpaces,
                             totalSlot: totalSpaces,
+                            parkinglotID: parkingLotID,
                           );
                         }),
               ],
