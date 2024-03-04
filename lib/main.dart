@@ -7,6 +7,7 @@ import 'package:user_app/Screens/Booking/bookingwidget.dart';
 import 'package:user_app/Screens/FunctionPage/FunctionPageWidget.dart';
 import 'package:user_app/Screens/LocationPage/LocationDetailWidget.dart';
 import 'package:user_app/Screens/LocationPage/searchLocationWidget.dart';
+import 'package:user_app/Screens/Plan/planwidget.dart';
 import 'package:user_app/Screens/register.dart';
 
 import 'Screens/Auth/LoginScreen.dart';
@@ -56,7 +57,8 @@ class MyApp extends StatelessWidget {
         '/register': (context) => RegisterPage(),
         '/location':(context) => SearchLocationWidget(),
         '/locationDetail':(context) => LocationDetailWidget(),
-        '/booking':(context)=>BookingWidget()
+        '/booking':(context)=>BookingWidget(),
+        '/plan':(context)=>PlanWidget()
       },
     );
   }
