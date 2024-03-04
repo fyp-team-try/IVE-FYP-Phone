@@ -325,7 +325,7 @@ class DetailPageContent extends StatelessWidget {
                           ),
                           child: FFButtonWidget(
                             onPressed: () async {
-                              Navigator.pushNamed(context, '/locationDetail');
+                              Navigator.pushNamed(context, '/booking');
                             },
                             text: 'Booking Now',
                             options: FFButtonOptions(

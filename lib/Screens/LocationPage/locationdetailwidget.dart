@@ -35,14 +35,19 @@ class _LocationDetailWidgetState extends State<LocationDetailWidget> {
     super.dispose();
   }
 
-  Future<ParkingLotInfo> GetParkingLotInfo() async {
-      String loadingUrl ="https://fyp.alexchoicy.live/api/v1/parkinglots/${parkingLotID.toString()}";
+  Future<ParkingLotInfo?> GetParkingLotInfo() async {
+    try {
+      String loadingUrl =
+          "https://fyp.alexchoicy.live/api/v1/parkinglots/${parkingLotID.toString()}";
       print(loadingUrl);
       final url = Uri.parse(loadingUrl);
       final response = await http.get(url);
       final json = jsonDecode(response.body);
-      print(response.statusCode.toString());  
+      print(response.statusCode.toString());
       return parkingLotInfo = ParkingLotInfo.fromJson(json['data']);
+    } catch (ex) {
+      return null;
+    }
   }
 
   @override
@@ -52,21 +57,20 @@ class _LocationDetailWidgetState extends State<LocationDetailWidget> {
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
           : FocusScope.of(context).unfocus(),
-      child:FutureBuilder<ParkingLotInfo>(
-            future: GetParkingLotInfo(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else if (snapshot.hasData) {
-                final parkingLotInfo = snapshot.data!;
-                return DetailPageContent(parkingLotInfo: parkingLotInfo);
-              } else {
-                return Center(child: Text('No data available'));
-              }
+      child: FutureBuilder<ParkingLotInfo?>(
+          future: GetParkingLotInfo(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (snapshot.hasData) {
+              final parkingLotInfo = snapshot.data!;
+              return DetailPageContent(parkingLotInfo: parkingLotInfo);
+            } else {
+              return Text('No data available');
             }
-          ),
+          }),
     );
   }
 }
