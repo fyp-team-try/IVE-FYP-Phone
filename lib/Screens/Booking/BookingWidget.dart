@@ -118,7 +118,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                                               alignment:
                                                   AlignmentDirectional(-1, 0),
                                               child: Text(
-                                                'Car Lot :',
+                                                'Parking Lot :',
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -264,14 +264,14 @@ class _BookingWidgetState extends State<BookingWidget> {
                                               alignment:
                                                   AlignmentDirectional(-1, 0),
                                               child: Text(
-                                                'Car Slot Type :',
+                                                'Parking Space Type :',
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
                                                         .override(
                                                           fontFamily:
                                                               'Readex Pro',
-                                                          fontSize: 20,
+                                                          fontSize: 15,
                                                         ),
                                               ),
                                             ),
@@ -577,7 +577,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                                   Align(
                                     alignment: AlignmentDirectional(0, 0),
                                     child: Text(
-                                      'Price :',
+                                      'Charge :',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(

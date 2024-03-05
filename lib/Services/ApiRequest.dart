@@ -31,4 +31,19 @@ class ApiRequest {
     } catch (e) {}
     throw Exception('Failed to load data');
   }
+
+    Future<ApiResponse<T>> get<T>(String endpoint,
+      T Function(Object? json) fromJsonT) async {
+    try {
+      Uri url = Uri.parse('$apiUrl/$endpoint');
+      final response = await http.get(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          });
+      Map<String, dynamic> json = jsonDecode(response.body);
+      ApiResponse<T> apiResponse = ApiResponse.fromJson(json, fromJsonT);
+      return apiResponse;
+    } catch (e) {}
+    throw Exception('Failed to load data');
+  }
 }

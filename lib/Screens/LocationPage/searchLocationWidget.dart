@@ -5,7 +5,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:user_app/Components/LocationListItem.dart';
+import 'package:user_app/Models/Api/ApiResponse.dart';
 import 'package:user_app/Models/ParkingLotInfo.dart';
+import 'package:user_app/Services/ApiRequest.dart';
 
 import 'searchLocationModel.dart';
 export 'searchLocationModel.dart';
@@ -22,7 +24,7 @@ class SearchLocationWidget extends StatefulWidget {
 class _SearchLocationWidgetState extends State<SearchLocationWidget> {
   late SearchLocationModel _model;
 
-  List<ParkingLotInfo> items = List.empty();
+  List<ParkingLotInfo>? items = <ParkingLotInfo>[];
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
@@ -40,9 +42,10 @@ class _SearchLocationWidgetState extends State<SearchLocationWidget> {
     super.dispose();
   }
 
+/*
   void GetParkingLots() async {
     try {
-      const loadingUrl = "https://fyp.alexchoicy.live/api/v1/parkinglots";
+      const loadingUrl = "";
       final url = Uri.parse(loadingUrl);
       final response = await http.get(url);
       final json = jsonDecode(response.body);
@@ -65,6 +68,30 @@ class _SearchLocationWidgetState extends State<SearchLocationWidget> {
         duration: Duration(seconds: 5),
       ));
     }
+  }
+*/
+
+  void GetParkingLots() async {
+    try {
+      ApiRequest api = ApiRequest();
+      ApiResponse<List<ParkingLotInfo>> response = await api.get(
+          'parkinglots',
+          (json) => (json as List<dynamic>).map<ParkingLotInfo>((dynamic item) {
+                return ParkingLotInfo.fromJson(item);
+              }).toList());
+      print(response.data.toString());
+
+      if (response.statusCode == 200) {
+        setState(() {
+          items = response.data;
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Data Fetch failed'),
+          duration: Duration(seconds: 5),
+        ));
+      }
+    } catch (e) {}
   }
 
   @override
@@ -235,7 +262,7 @@ class _SearchLocationWidgetState extends State<SearchLocationWidget> {
                     style: FlutterFlowTheme.of(context).labelMedium,
                   ),
                 ),
-                items.isEmpty
+                items!.isEmpty
                     ? Center(child: CircularProgressIndicator())
                     : ListView.builder(
                         padding: EdgeInsets.fromLTRB(
@@ -246,9 +273,9 @@ class _SearchLocationWidgetState extends State<SearchLocationWidget> {
                         ),
                         shrinkWrap: true,
                         scrollDirection: Axis.vertical,
-                        itemCount: items.length,
+                        itemCount: items?.length,
                         itemBuilder: (context, index) {
-                          ParkingLotInfo currItem = items[index];
+                          ParkingLotInfo currItem = items![index];
                           return LocationListItem(parkingLotInfo: currItem);
                         }),
               ],

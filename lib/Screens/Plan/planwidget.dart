@@ -117,7 +117,7 @@ class _PlanWidgetState extends State<PlanWidget> {
                                               alignment:
                                                   AlignmentDirectional(-1, 0),
                                               child: Text(
-                                                'Car Lot :',
+                                                'Parking Lot :',
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -265,14 +265,14 @@ class _PlanWidgetState extends State<PlanWidget> {
                                               alignment:
                                                   AlignmentDirectional(-1, 0),
                                               child: Text(
-                                                'Car Slot Type :',
+                                                'Parking Space Type :',
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
                                                         .override(
                                                           fontFamily:
                                                               'Readex Pro',
-                                                          fontSize: 20,
+                                                          fontSize: 15,
                                                         ),
                                               ),
                                             ),
@@ -290,14 +290,14 @@ class _PlanWidgetState extends State<PlanWidget> {
                                                 textStyle:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium,
-                                                hintText: 'Select car slot',
+                                                hintText: 'Select slot type',
                                                 icon: Icon(
                                                   Icons
                                                       .keyboard_arrow_down_rounded,
                                                   color: FlutterFlowTheme.of(
                                                           context)
                                                       .secondaryText,
-                                                  size: 24,
+                                                  size: 15,
                                                 ),
                                                 fillColor:
                                                     FlutterFlowTheme.of(context)
@@ -494,7 +494,7 @@ class _PlanWidgetState extends State<PlanWidget> {
                                                 alignment:
                                                     AlignmentDirectional(0, 0),
                                                 child: Text(
-                                                  'Hello World',
+                                                  '',
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodyMedium,

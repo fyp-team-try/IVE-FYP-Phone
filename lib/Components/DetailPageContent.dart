@@ -129,7 +129,7 @@ class DetailPageContent extends StatelessWidget {
                                   Align(
                                     alignment: AlignmentDirectional(0, 0),
                                     child: Text(
-                                      '0000-1600  (\$10)',
+                                      '0000-1600  (\$10/Hour)',
                                       textAlign: TextAlign.center,
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
@@ -142,7 +142,7 @@ class DetailPageContent extends StatelessWidget {
                                   Align(
                                     alignment: AlignmentDirectional(0, 0),
                                     child: Text(
-                                      '1700-2300  (\$20)',
+                                      '1700-2300  (\$20/Hour)',
                                       textAlign: TextAlign.center,
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
@@ -214,7 +214,7 @@ class DetailPageContent extends StatelessWidget {
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(16, 0, 0, 8),
                         child: Text(
-                          'Existing parking space',
+                          'Available/Total parking space',
                           style:
                               FlutterFlowTheme.of(context).bodySmall.override(
                                     fontFamily: 'Outfit',
