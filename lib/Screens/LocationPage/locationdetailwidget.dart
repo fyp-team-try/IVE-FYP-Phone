@@ -2,7 +2,9 @@ import 'package:flutterflow_ui/flutterflow_ui.dart';
 
 import 'package:flutter/material.dart';
 import 'package:user_app/Components/DetailPageContent.dart';
+import 'package:user_app/Models/Api/ApiResponse.dart';
 import 'package:user_app/Models/ParkingLotInfo.dart';
+import 'package:user_app/Services/ApiRequest.dart';
 
 import 'locationdetailmodel.dart';
 export 'locationdetailmodel.dart';
@@ -35,16 +37,37 @@ class _LocationDetailWidgetState extends State<LocationDetailWidget> {
     super.dispose();
   }
 
-  Future<ParkingLotInfo?> GetParkingLotInfo() async {
+
+  /*Future<ParkingLotInfo?> GetParkingLotInfo() async {
     try {
-      String loadingUrl =
-          "https://fyp.alexchoicy.live/api/v1/parkinglots/${parkingLotID.toString()}";
+      String loadingUrl ="";
       print(loadingUrl);
       final url = Uri.parse(loadingUrl);
       final response = await http.get(url);
       final json = jsonDecode(response.body);
       print(response.statusCode.toString());
       return parkingLotInfo = ParkingLotInfo.fromJson(json['data']);
+    } catch (ex) {
+      return null;
+    }
+  }*/
+
+    Future<ParkingLotInfo?> GetParkingLotInfo() async {
+    try {
+      ApiRequest  api = new ApiRequest();
+
+      ApiResponse<ParkingLotInfo> response = await api.get(
+          'parkinglots/${parkingLotID.toString()}',
+          (json) => ParkingLotInfo.fromJson(json as Map<String, dynamic>));
+
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Data Fetch failed'),
+          duration: Duration(seconds: 5),
+        ));
+      }
     } catch (ex) {
       return null;
     }
