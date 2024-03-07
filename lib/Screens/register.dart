@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:user_app/Models/Api/RequestModels/AuthRequestModels.dart';
+import 'package:user_app/Services/request/AuthRequest.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -12,13 +14,13 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final TextEditingController userIDController = TextEditingController();
+  final TextEditingController userNameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
 
-  void registerUser() {
-    String userID = userIDController.text;
+  void registerUser() async {
+    String userID = userNameController.text;
     String password = passwordController.text;
     String email = emailController.text;
     String phoneNumber = phoneNumberController.text;
@@ -26,37 +28,36 @@ class _RegisterPageState extends State<RegisterPage> {
     bool inputIsValid = validateInputs(userID, password, email, phoneNumber);
 
     if (inputIsValid) {
-      print('Test');
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Registration Successful'),
-            content: Text('You have successfully registered.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  // Clear the text fields
-                  userIDController.clear();
-                  passwordController.clear();
-                  emailController.clear();
-                  phoneNumberController.clear();
-                  // Navigate back to the login page
-                  Navigator.pushReplacementNamed(context, '/login');
-                },
-                child: Text('OK'),
-              ),
-            ],
+      try {
+        RegisterRequestModel registerRequestModel = RegisterRequestModel(
+            username: userNameController.text,
+            password: passwordController.text);
+        bool isRegSuccess = await RegisterRequest(registerRequestModel, context);
+
+        if (isRegSuccess) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Registration Successful'),
+                content: Text('You have successfully registered.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {},
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
           );
-        },
-      );
+          Navigator.pushNamed(context, '/login');
+        }
+      } catch (e) {}
     }
   }
 
   bool validateInputs(
       String userID, String password, String email, String phoneNumber) {
-    bool isValid = true;
-
     bool inputsIsEmpty = userID.isEmpty ||
         password.isEmpty ||
         email.isEmpty ||
@@ -66,7 +67,7 @@ class _RegisterPageState extends State<RegisterPage> {
     bool hasNumber = RegExp(r'[0-9]+').hasMatch(password);
     const minLength = 8;
 
-    isValid = hasUpppercase &&
+    bool isPasswordValid = hasUpppercase &&
         hasLowercase &&
         hasNumber &&
         (password.length >= minLength);
@@ -92,7 +93,7 @@ class _RegisterPageState extends State<RegisterPage> {
       return false;
     }
 
-    if (!isValid) {
+    if (!isPasswordValid) {
       showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -135,7 +136,7 @@ class _RegisterPageState extends State<RegisterPage> {
           });
       return false;
     }
-    return isValid;
+    return true;
   }
 
   @override
@@ -150,9 +151,9 @@ class _RegisterPageState extends State<RegisterPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextField(
-              controller: userIDController,
+              controller: userNameController,
               decoration: InputDecoration(
-                labelText: 'User ID',
+                labelText: 'User Name',
               ),
             ),
             SizedBox(height: 16.0),
