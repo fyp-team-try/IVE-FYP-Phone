@@ -77,7 +77,7 @@ class _RegisterPageState extends State<RegisterPage> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Error'),
-            content: Text('Please fill in all fields.'),
+            content: Text('Please fill in all the fields.'),
             actions: [
               TextButton(
                 onPressed: () {

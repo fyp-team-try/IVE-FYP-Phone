@@ -37,7 +37,6 @@ class _LocationDetailWidgetState extends State<LocationDetailWidget> {
     super.dispose();
   }
 
-
   /*Future<ParkingLotInfo?> GetParkingLotInfo() async {
     try {
       String loadingUrl ="";
@@ -52,9 +51,9 @@ class _LocationDetailWidgetState extends State<LocationDetailWidget> {
     }
   }*/
 
-    Future<ParkingLotInfo?> GetParkingLotInfo() async {
+  Future<ParkingLotInfo?> GetParkingLotInfo() async {
     try {
-      ApiRequest  api = new ApiRequest();
+      ApiRequest api = new ApiRequest();
 
       ApiResponse<ParkingLotInfo> response = await api.get(
           'parkinglots/${parkingLotID.toString()}',

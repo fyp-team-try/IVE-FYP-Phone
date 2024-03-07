@@ -12,7 +12,8 @@ class ParkingLotInfo {
   int regularPlanSpaces;
   int electricPlanSpaces;
   double walkinReservedRatio;
-  int reservableOnlySpaces;
+  int reservableOnlyRegularSpaces;
+  int reservableOnlyElectricSpaces ;
   double reservedDiscount;
   int minReservationWindowHours;
   int maxReservationHours;
@@ -31,7 +32,8 @@ class ParkingLotInfo {
     required this.regularPlanSpaces,
     required this.electricPlanSpaces,
     required this.walkinReservedRatio,
-    required this.reservableOnlySpaces,
+    required this.reservableOnlyRegularSpaces,
+    required this.reservableOnlyElectricSpaces,
     required this.reservedDiscount,
     required this.minReservationWindowHours,
     required this.maxReservationHours,
@@ -52,12 +54,13 @@ class ParkingLotInfo {
       regularPlanSpaces: json['regularPlanSpaces'],
       electricPlanSpaces: json['electricPlanSpaces'],
       walkinReservedRatio: json['walkinReservedRatio'],
-      reservableOnlySpaces: json['reservableOnlySpaces'],
+      reservableOnlyRegularSpaces: json['reservableOnlyRegularSpaces'],
+      reservableOnlyElectricSpaces: json['reservableOnlyElectricSpaces'],
       reservedDiscount: json['reservedDiscount'],
       minReservationWindowHours: json['minReservationWindowHours'],
       maxReservationHours: json['maxReservationHours'],
       availableRegularSpaces: json['availableRegularSpaces'],
-      availableElectricSpaces: json['availableElectricSpaces'],
+      availableElectricSpaces: json['availableElectricSpaces']
     );
   }
 
@@ -74,7 +77,8 @@ class ParkingLotInfo {
       'regularPlanSpaces': parkingLotInfo.regularPlanSpaces,
       'electricPlanSpaces': parkingLotInfo.electricPlanSpaces,
       'walkinReservedRatio': parkingLotInfo.walkinReservedRatio,
-      'reservableOnlySpaces': parkingLotInfo.reservableOnlySpaces,
+      'reservableOnlyRegularSpaces': parkingLotInfo.reservableOnlyRegularSpaces,
+      'reservableOnlyRegularSpaces': parkingLotInfo.reservableOnlyRegularSpaces,
       'reservedDiscount': parkingLotInfo.reservedDiscount,
       'minReservationWindowHours': parkingLotInfo.minReservationWindowHours,
       'maxReservationHours': parkingLotInfo.maxReservationHours,
