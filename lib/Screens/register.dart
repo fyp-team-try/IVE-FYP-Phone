@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:user_app/Models/Api/RequestModels/AuthRequestModels.dart';
 import 'package:user_app/Services/request/AuthRequest.dart';
 
@@ -19,6 +20,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
 
+  bool _loading = false;
+
   void registerUser() async {
     String userID = userNameController.text;
     String password = passwordController.text;
@@ -32,7 +35,14 @@ class _RegisterPageState extends State<RegisterPage> {
         RegisterRequestModel registerRequestModel = RegisterRequestModel(
             username: userNameController.text,
             password: passwordController.text);
-        bool isRegSuccess = await RegisterRequest(registerRequestModel, context);
+        setState(() {
+          _loading = true;
+        });
+        bool isRegSuccess =
+            await RegisterRequest(registerRequestModel, context);
+        setState(() {
+          _loading = false;
+        });
 
         if (isRegSuccess) {
           showDialog(
@@ -141,73 +151,75 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Register'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              controller: userNameController,
-              decoration: InputDecoration(
-                labelText: 'User Name',
-              ),
-            ),
-            SizedBox(height: 16.0),
-            TextField(
-              controller: passwordController,
-              decoration: InputDecoration(
-                labelText: 'Password',
-              ),
-              obscureText: true,
-            ),
-            SizedBox(height: 16.0),
-            TextField(
-              controller: emailController,
-              decoration: InputDecoration(
-                labelText: 'Email',
-              ),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            SizedBox(height: 16.0),
-            TextField(
-              controller: phoneNumberController,
-              decoration: InputDecoration(
-                labelText: 'Phone Number',
-              ),
-              keyboardType: TextInputType.phone,
-            ),
-            SizedBox(height: 16.0),
-            Container(
-              margin: EdgeInsets.only(top: 50.0), // Add margin top here
-              child: GestureDetector(
-                onTap: registerUser,
-                child: Container(
-                  padding: const EdgeInsets.all(25),
-                  margin: const EdgeInsets.symmetric(horizontal: 25),
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(10),
+    return ModalProgressHUD(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Register'),
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextField(
+                  controller: userNameController,
+                  decoration: InputDecoration(
+                    labelText: 'User Name',
                   ),
-                  child: const Center(
-                    child: Text(
-                      "Register",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                ),
+                SizedBox(height: 16.0),
+                TextField(
+                  controller: passwordController,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                  ),
+                  obscureText: true,
+                ),
+                SizedBox(height: 16.0),
+                TextField(
+                  controller: emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                SizedBox(height: 16.0),
+                TextField(
+                  controller: phoneNumberController,
+                  decoration: InputDecoration(
+                    labelText: 'Phone Number',
+                  ),
+                  keyboardType: TextInputType.phone,
+                ),
+                SizedBox(height: 16.0),
+                Container(
+                  margin: EdgeInsets.only(top: 50.0), // Add margin top here
+                  child: GestureDetector(
+                    onTap: registerUser,
+                    child: Container(
+                      padding: const EdgeInsets.all(25),
+                      margin: const EdgeInsets.symmetric(horizontal: 25),
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "Register",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
-    );
+        inAsyncCall: _loading);
   }
 }
