@@ -33,12 +33,15 @@ class ApiRequest {
   }
 
     Future<ApiResponse<T>> get<T>(String endpoint,
-      T Function(Object? json) fromJsonT) async {
+      T Function(Object? json) fromJsonT,[String? token]) async {
     try {
       Uri url = Uri.parse('$apiUrl/$endpoint');
       final response = await http.get(url,
-          headers: <String, String>{
+          headers: token==null?<String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
+          }:<String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization':'Bearer $token'
           });
       Map<String, dynamic> json = jsonDecode(response.body);
       ApiResponse<T> apiResponse = ApiResponse.fromJson(json, fromJsonT);

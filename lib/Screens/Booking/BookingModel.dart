@@ -9,16 +9,15 @@ class BookingModel extends FlutterFlowModel<BookingWidget> {
   final formKey = GlobalKey<FormState>();
   // State field(s) for DropDown widget.
   String? dropDownValue1;
-  FormFieldController<String>? dropDownValueController1;
   String? dropDownValue2;
   String? dropDownValue3;
-  FormFieldController<String>? dropDownValueController2;
-  FormFieldController<String>? dropDownValueController3;
-  DateTime? datePicked1;
-  DateTime? datePicked2;
-  DateTime? datePicked3;
 
-  /// Initialization and disposal methods.
+  DateTime? pickerDateValue1;
+  TimeOfDay? pickerTimeValue1;
+    DateTime? pickerDateValue2;
+  TimeOfDay? pickerTimeValue2;
+
+
 
   @override
   void initState(BuildContext context) {}

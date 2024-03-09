@@ -2,12 +2,20 @@ import 'package:flutterflow_ui/flutterflow_ui.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:provider/provider.dart';
+import 'package:user_app/Models/Api/ApiResponse.dart';
+import 'package:user_app/Models/ParkingLotInfo.dart';
+import 'package:user_app/Models/VehicleInfo.dart';
+import 'package:user_app/Models/MyInfo.dart';
+import 'package:user_app/Providers/AuthProvider.dart';
+import 'package:user_app/Services/ApiRequest.dart';
 
 import 'BookingModel.dart';
 export 'BookingModel.dart';
 
 class BookingWidget extends StatefulWidget {
-  const BookingWidget({super.key});
+  const BookingWidget({super.key, required this.parkingLotInfo});
+  final ParkingLotInfo parkingLotInfo;
 
   @override
   State<BookingWidget> createState() => _BookingWidgetState();
@@ -25,6 +33,7 @@ class _BookingWidgetState extends State<BookingWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {});
+    GetVehicleInfo(context);
   }
 
   @override
@@ -34,8 +43,41 @@ class _BookingWidgetState extends State<BookingWidget> {
     super.dispose();
   }
 
+  List<VehicleInfo>? vehicleInfoList;
+
+  void GetVehicleInfo(BuildContext context) async {
+    print('GetVehicleInfo()');
+    try {
+      ApiRequest api = new ApiRequest();
+
+      String token = context.read<AuthProvider>().getUserInfo().token;
+      ApiResponse<MyInfo> response = await api.get(
+          'me', (json) => MyInfo.fromJson(json as Map<String, dynamic>), token);
+
+      ApiResponse<List<VehicleInfo>> response2 = await api.get(
+          'users/${response.data?.userID}/vehicles',
+          (json) => (json as List<dynamic>).map<VehicleInfo>((dynamic item) {
+                return VehicleInfo.fromJson(item);
+              }).toList(),
+          token);
+
+      print('Response2:${response2.statusCode}');
+      if (response2.statusCode == 200) {
+        setState(() => vehicleInfoList = response2.data);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Data Fetch failed'),
+          duration: Duration(seconds: 5),
+        ));
+      }
+    } catch (ex) {
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final ParkingLotInfo parkingLotInfo = widget.parkingLotInfo;
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -51,7 +93,7 @@ class _BookingWidgetState extends State<BookingWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Booking',
+                'Reservation',
                 style: FlutterFlowTheme.of(context).headlineMedium.override(
                       fontFamily: 'Outfit',
                       fontSize: 32,
@@ -133,7 +175,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                                               alignment:
                                                   AlignmentDirectional(0, 0),
                                               child: FlutterFlowDropDown(
-                                                options: ['Option 1'],
+                                                options: [parkingLotInfo.name],
                                                 onChanged: (val) => setState(
                                                     () => _model
                                                         .dropDownValue1 = val),
@@ -163,6 +205,8 @@ class _BookingWidgetState extends State<BookingWidget> {
                                                 margin: EdgeInsetsDirectional
                                                     .fromSTEB(16, 4, 16, 4),
                                                 hidesUnderline: true,
+                                                initialOption:
+                                                    parkingLotInfo.name,
                                               ),
                                             ),
                                           ],
@@ -203,41 +247,58 @@ class _BookingWidgetState extends State<BookingWidget> {
                                               ),
                                             ),
                                             Align(
-                                              alignment:
-                                                  AlignmentDirectional(0, 0),
-                                              child: FlutterFlowDropDown(
-                                                options: ['Option 1'],
-                                                onChanged: (val) => setState(
-                                                    () => _model
-                                                        .dropDownValue2 = val),
-                                                width: 186,
-                                                height: 50,
-                                                textStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium,
-                                                hintText: 'Select car plate',
-                                                icon: Icon(
-                                                  Icons
-                                                      .keyboard_arrow_down_rounded,
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .secondaryText,
-                                                  size: 24,
-                                                ),
-                                                fillColor:
-                                                    FlutterFlowTheme.of(context)
-                                                        .secondaryBackground,
-                                                elevation: 2,
-                                                borderColor:
-                                                    FlutterFlowTheme.of(context)
-                                                        .alternate,
-                                                borderWidth: 2,
-                                                borderRadius: 8,
-                                                margin: EdgeInsetsDirectional
-                                                    .fromSTEB(16, 4, 16, 4),
-                                                hidesUnderline: true,
-                                              ),
-                                            ),
+                                                alignment:
+                                                    AlignmentDirectional(0, 0),
+                                                child: FlutterFlowDropDown(
+                                                  options: vehicleInfoList !=
+                                                          null
+                                                      ? vehicleInfoList!
+                                                          .map((vehicle) =>
+                                                              vehicle
+                                                                  .vehicleLicense)
+                                                          .toList()
+                                                      : [],
+                                                  onChanged: (val) {
+                                                    setState(() => _model
+                                                        .dropDownValue2 = val);
+
+                                                    print('Value2:${_model.dropDownValue2}');
+                                                    print(
+                                                        vehicleInfoList!.any((vehicle) =>
+                                                            vehicle.vehicleLicense ==_model.dropDownValue2 &&
+                                                            vehicle.vehicleType ==
+                                                                1));
+                                                  },
+                                                  width: 186,
+                                                  height: 50,
+                                                  textStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium,
+                                                  hintText: 'Select car plate',
+                                                  icon: Icon(
+                                                    Icons
+                                                        .keyboard_arrow_down_rounded,
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .secondaryText,
+                                                    size: 24,
+                                                  ),
+                                                  fillColor:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .secondaryBackground,
+                                                  elevation: 2,
+                                                  borderColor:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .alternate,
+                                                  borderWidth: 2,
+                                                  borderRadius: 8,
+                                                  margin: EdgeInsetsDirectional
+                                                      .fromSTEB(16, 4, 16, 4),
+                                                  hidesUnderline: true,
+                                                )),
                                           ],
                                         ),
                                       ),
@@ -279,7 +340,12 @@ class _BookingWidgetState extends State<BookingWidget> {
                                               alignment:
                                                   AlignmentDirectional(0, 0),
                                               child: FlutterFlowDropDown(
-                                                options: ['Option 1'],
+                                                options: vehicleInfoList!=null&&vehicleInfoList!.any((vehicle) =>
+                                                            vehicle.vehicleLicense ==_model.dropDownValue2 &&
+                                                            vehicle.vehicleType ==
+                                                                1)
+                                                    ? ['Regular', 'Electric']
+                                                    : ['Regular'],
                                                 onChanged: (val) => setState(
                                                     () => _model
                                                         .dropDownValue3 = val),
@@ -344,40 +410,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                                               highlightColor:
                                                   Colors.transparent,
                                               onTap: () async {
-                                                final _datePicked1Date =
-                                                    await showDatePicker(
-                                                  context: context,
-                                                  initialDate:
-                                                      getCurrentTimestamp,
-                                                  firstDate:
-                                                      getCurrentTimestamp,
-                                                  lastDate: DateTime(2050),
-                                                );
-
-                                                TimeOfDay? _datePicked1Time;
-                                                if (_datePicked1Date != null) {
-                                                  _datePicked1Time =
-                                                      await showTimePicker(
-                                                    context: context,
-                                                    initialTime:
-                                                        TimeOfDay.fromDateTime(
-                                                            getCurrentTimestamp),
-                                                  );
-                                                }
-
-                                                if (_datePicked1Date != null &&
-                                                    _datePicked1Time != null) {
-                                                  safeSetState(() {
-                                                    _model.datePicked1 =
-                                                        DateTime(
-                                                      _datePicked1Date.year,
-                                                      _datePicked1Date.month,
-                                                      _datePicked1Date.day,
-                                                      _datePicked1Time!.hour,
-                                                      _datePicked1Time.minute,
-                                                    );
-                                                  });
-                                                }
+                                                //Dont put anything here
                                               },
                                               child: Container(
                                                 width: double.infinity,
@@ -397,31 +430,18 @@ class _BookingWidgetState extends State<BookingWidget> {
                                                 ),
                                                 child: FFButtonWidget(
                                                   onPressed: () async {
-                                                    final _datePicked2Date =
-                                                        await showDatePicker(
-                                                      context: context,
-                                                      initialDate:
-                                                          getCurrentTimestamp,
-                                                      firstDate:
-                                                          (getCurrentTimestamp ??
-                                                              DateTime(1900)),
-                                                      lastDate:
-                                                          (getCurrentTimestamp ??
-                                                              DateTime(2050)),
-                                                    );
-
-                                                    if (_datePicked2Date !=
-                                                        null) {
-                                                      safeSetState(() {
-                                                        _model.datePicked2 =
-                                                            DateTime(
-                                                          _datePicked2Date.year,
-                                                          _datePicked2Date
-                                                              .month,
-                                                          _datePicked2Date.day,
-                                                        );
-                                                      });
-                                                    }
+                                                    await showDatePicker(
+                                                        context: context,
+                                                        firstDate:
+                                                            getCurrentTimestamp,
+                                                        lastDate: DateTime(
+                                                            getCurrentTimestamp
+                                                                    .year +
+                                                                1));
+                                                    await showTimePicker(
+                                                        context: context,
+                                                        initialTime:
+                                                            TimeOfDay.now());
                                                   },
                                                   text: 'Select Start Date',
                                                   options: FFButtonOptions(
@@ -467,7 +487,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              'Expiry Date',
+                                              'End Date',
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .labelMedium,
@@ -490,32 +510,20 @@ class _BookingWidgetState extends State<BookingWidget> {
                                               ),
                                               child: FFButtonWidget(
                                                 onPressed: () async {
-                                                  final _datePicked3Date =
-                                                      await showDatePicker(
-                                                    context: context,
-                                                    initialDate:
-                                                        getCurrentTimestamp,
-                                                    firstDate:
-                                                        (getCurrentTimestamp ??
-                                                            DateTime(1900)),
-                                                    lastDate:
-                                                        (getCurrentTimestamp ??
-                                                            DateTime(2050)),
-                                                  );
-
-                                                  if (_datePicked3Date !=
-                                                      null) {
-                                                    safeSetState(() {
-                                                      _model.datePicked3 =
-                                                          DateTime(
-                                                        _datePicked3Date.year,
-                                                        _datePicked3Date.month,
-                                                        _datePicked3Date.day,
-                                                      );
-                                                    });
-                                                  }
+                                                  await showDatePicker(
+                                                      context: context,
+                                                      firstDate:
+                                                          getCurrentTimestamp,
+                                                      lastDate: DateTime(
+                                                          getCurrentTimestamp
+                                                                  .year +
+                                                              1));
+                                                  await showTimePicker(
+                                                      context: context,
+                                                      initialTime:
+                                                          TimeOfDay.now());
                                                 },
-                                                text: 'Delect Expiry Date',
+                                                text: 'Select Expiry Date',
                                                 options: FFButtonOptions(
                                                   height: 40,
                                                   padding: EdgeInsetsDirectional

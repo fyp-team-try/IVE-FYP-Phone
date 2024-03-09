@@ -58,7 +58,6 @@ class MyApp extends StatelessWidget {
         '/register': (context) => RegisterPage(),
         '/location': (context) => SearchLocationWidget(),
         '/locationDetail': (context) => LocationDetailWidget(),
-        '/booking': (context) => BookingWidget(),
         '/plan': (context) => PlanWidget(),
         '/payment':(context)=>PaymentWidget()
       },

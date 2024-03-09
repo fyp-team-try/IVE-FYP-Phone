@@ -42,35 +42,6 @@ class _SearchLocationWidgetState extends State<SearchLocationWidget> {
     super.dispose();
   }
 
-/*
-  void GetParkingLots() async {
-    try {
-      const loadingUrl = "";
-      final url = Uri.parse(loadingUrl);
-      final response = await http.get(url);
-      final json = jsonDecode(response.body);
-
-      if (response.statusCode == 200) {
-        setState(() {
-          items = json['data'].map<ParkingLotInfo>((dynamic item) {
-            return ParkingLotInfo.fromJson(item);
-          }).toList();
-        });
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Data Fetch failed'),
-          duration: Duration(seconds: 5),
-        ));
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(e.toString()),
-        duration: Duration(seconds: 5),
-      ));
-    }
-  }
-*/
-
   void GetParkingLots() async {
     try {
       ApiRequest api = ApiRequest();

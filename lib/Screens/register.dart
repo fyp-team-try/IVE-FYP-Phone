@@ -152,6 +152,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
+        inAsyncCall: _loading,
         child: Scaffold(
           appBar: AppBar(
             title: Text('Register'),
@@ -219,7 +220,6 @@ class _RegisterPageState extends State<RegisterPage> {
               ],
             ),
           ),
-        ),
-        inAsyncCall: _loading);
+        ));
   }
 }
