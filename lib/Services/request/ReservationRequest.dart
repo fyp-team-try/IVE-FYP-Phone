@@ -11,10 +11,10 @@ import '../ApiRequest.dart';
 Future<bool> createReservationRequest(ReservationRequestModel data, BuildContext context,token) async {
   try {
     ApiRequest api = ApiRequest();
-    ApiResponse<ReservationRequestModel> response = await api.post<ReservationRequestModel>(
+    ApiResponse<String> response = await api.post<String>(
         data, 
         'reservations', 
-        (json) => ReservationRequestModel.fromJson(json as Map<String, dynamic>)
+        (json) => json.toString()
         ,token);
 
     if (response.success) {

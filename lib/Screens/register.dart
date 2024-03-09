@@ -45,7 +45,7 @@ class _RegisterPageState extends State<RegisterPage> {
         });
 
         if (isRegSuccess) {
-          showDialog(
+          await showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
@@ -53,7 +53,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 content: Text('You have successfully registered.'),
                 actions: [
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                     child: Text('OK'),
                   ),
                 ],
@@ -67,7 +69,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   bool validateInputs(
-      String userID, String password, String email, String phoneNumber) {
+      String userID, String password, String email, String phoneNumber){
     bool inputsIsEmpty = userID.isEmpty ||
         password.isEmpty ||
         email.isEmpty ||

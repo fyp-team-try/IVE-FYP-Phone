@@ -34,11 +34,6 @@ Future<bool> RegisterRequest(RegisterRequestModel data, BuildContext context) as
         data, 'auth/register', (json) => json.toString());
 
     if (response.success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(response.data.toString()),
-        ),
-      );
       return true;
     }
     throw Exception(response.errorMessage);

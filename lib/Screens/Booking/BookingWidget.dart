@@ -112,7 +112,7 @@ class _BookingWidgetState extends State<BookingWidget> {
         bool isRegSuccess = await createReservationRequest(reservationRequestModel, context,token);
 
         if (isRegSuccess) {
-          showDialog(
+          await showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
@@ -120,7 +120,9 @@ class _BookingWidgetState extends State<BookingWidget> {
                 content: Text('You have reserveed a spot.'),
                 actions: [
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                     child: Text('OK'),
                   ),
                 ],
@@ -131,7 +133,7 @@ class _BookingWidgetState extends State<BookingWidget> {
         }
       } catch (e) {}
     }else{
-          showDialog(
+          await showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
