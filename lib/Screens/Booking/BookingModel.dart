@@ -14,7 +14,7 @@ class BookingModel extends FlutterFlowModel<BookingWidget> {
 
   DateTime? pickerDateValue1;
   TimeOfDay? pickerTimeValue1;
-    DateTime? pickerDateValue2;
+  DateTime? pickerDateValue2;
   TimeOfDay? pickerTimeValue2;
 
 

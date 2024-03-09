@@ -37,7 +37,6 @@ class UserInfo {
     };
   }
 
-  static UserInfo deserialize(String json) =>
-      UserInfo.fromJson(jsonDecode(json));
+  static UserInfo deserialize(String json) =>UserInfo.fromJson(jsonDecode(json));
   static String serialize(UserInfo model) => json.encode(UserInfo.toMap(model));
 }

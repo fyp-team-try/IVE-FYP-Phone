@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:user_app/Models/Api/ApiResponse.dart';
+import 'package:user_app/Models/Api/RequestModels/ReservationRequestModel.dart';
 import 'package:user_app/Models/ParkingLotInfo.dart';
 import 'package:user_app/Models/VehicleInfo.dart';
 import 'package:user_app/Models/MyInfo.dart';
 import 'package:user_app/Providers/AuthProvider.dart';
 import 'package:user_app/Services/ApiRequest.dart';
+import 'package:user_app/Services/request/ReservationRequest.dart';
 
 import 'BookingModel.dart';
 export 'BookingModel.dart';
@@ -73,6 +75,80 @@ class _BookingWidgetState extends State<BookingWidget> {
     } catch (ex) {
       return null;
     }
+  }
+
+  void createReservation() async {
+    int? vehicleID = vehicleInfoList
+        ?.where((vehicle) => vehicle.vehicleLicense == _model.dropDownValue2)
+        .firstOrNull
+        ?.vehicleID;
+    int lotID = widget.parkingLotInfo.lotID;
+    DateTime? startDate = _model.pickerDateValue1;
+    TimeOfDay? startTime = _model.pickerTimeValue1;
+    DateTime? endDate = _model.pickerDateValue2;
+    TimeOfDay? endTime = _model.pickerTimeValue2;
+    String? spaceType = _model.dropDownValue3;
+
+    bool inputsNotNull = vehicleID != null &&
+        lotID != null &&
+        startDate != null &&
+        startTime != null &&
+        endDate != null &&
+        endTime != null &&
+        spaceType != null;
+
+    String token = context.read<AuthProvider>().getUserInfo().token;
+
+    if (inputsNotNull) {
+      try {
+        ReservationRequestModel reservationRequestModel =
+            ReservationRequestModel(
+                vehicleID: vehicleID,
+                lotID: lotID,
+                startTime: DateTime(startDate.year,startDate.month,startDate.day,startTime.hour,startTime.minute).toIso8601String(),
+                endTime: DateTime(endDate.year,endDate.month,endDate.day,endTime.hour,endTime.minute).toIso8601String(),
+                spaceType: spaceType.toUpperCase());
+
+        bool isRegSuccess = await createReservationRequest(reservationRequestModel, context,token);
+
+        if (isRegSuccess) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Reservation Successful'),
+                content: Text('You have reserveed a spot.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {},
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+          Navigator.pushNamed(context, '/locationDetail',arguments:widget.parkingLotInfo.lotID);
+        }
+      } catch (e) {}
+    }else{
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Error '),
+                content: Text('Please select all fields.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
   }
 
   @override
@@ -258,17 +334,10 @@ class _BookingWidgetState extends State<BookingWidget> {
                                                                   .vehicleLicense)
                                                           .toList()
                                                       : [],
-                                                  onChanged: (val) {
-                                                    setState(() => _model
-                                                        .dropDownValue2 = val);
-
-                                                    print('Value2:${_model.dropDownValue2}');
-                                                    print(
-                                                        vehicleInfoList!.any((vehicle) =>
-                                                            vehicle.vehicleLicense ==_model.dropDownValue2 &&
-                                                            vehicle.vehicleType ==
-                                                                1));
-                                                  },
+                                                  onChanged: (val) => setState(
+                                                      () => _model
+                                                              .dropDownValue2 =
+                                                          val),
                                                   width: 186,
                                                   height: 50,
                                                   textStyle:
@@ -340,8 +409,12 @@ class _BookingWidgetState extends State<BookingWidget> {
                                               alignment:
                                                   AlignmentDirectional(0, 0),
                                               child: FlutterFlowDropDown(
-                                                options: vehicleInfoList!=null&&vehicleInfoList!.any((vehicle) =>
-                                                            vehicle.vehicleLicense ==_model.dropDownValue2 &&
+                                                options: vehicleInfoList !=
+                                                            null &&
+                                                        vehicleInfoList!.any((vehicle) =>
+                                                            vehicle.vehicleLicense ==
+                                                                _model
+                                                                    .dropDownValue2 &&
                                                             vehicle.vehicleType ==
                                                                 1)
                                                     ? ['Regular', 'Electric']
@@ -430,20 +503,53 @@ class _BookingWidgetState extends State<BookingWidget> {
                                                 ),
                                                 child: FFButtonWidget(
                                                   onPressed: () async {
-                                                    await showDatePicker(
-                                                        context: context,
-                                                        firstDate:
-                                                            getCurrentTimestamp,
-                                                        lastDate: DateTime(
-                                                            getCurrentTimestamp
-                                                                    .year +
-                                                                1));
-                                                    await showTimePicker(
-                                                        context: context,
-                                                        initialTime:
-                                                            TimeOfDay.now());
+                                                    final DateTime? pickedDate =
+                                                        await showDatePicker(
+                                                            context: context,
+                                                            initialDate: _model
+                                                                    .pickerDateValue1 ??
+                                                                DateTime.now(),
+                                                            firstDate:
+                                                                DateTime.now(),
+                                                            lastDate: DateTime(
+                                                                DateTime
+                                                                            .now()
+                                                                        .year +
+                                                                    1,
+                                                                DateTime.now()
+                                                                    .month,
+                                                                DateTime.now()
+                                                                    .day));
+                                                    final TimeOfDay?
+                                                        pickedTime =
+                                                        await showTimePicker(
+                                                            context: context,
+                                                            initialTime: _model
+                                                                    .pickerTimeValue1 ??
+                                                                TimeOfDay
+                                                                    .now());
+
+                                                    if (pickedDate != null &&
+                                                        pickedTime != null) {
+                                                      setState(() {
+                                                        _model.pickerDateValue1 =
+                                                            pickedDate;
+                                                        _model.pickerTimeValue1 =
+                                                            pickedTime;
+                                                      });
+                                                    } else {
+                                                      setState(() {
+                                                        _model.pickerDateValue1 =
+                                                            null;
+                                                        _model.pickerTimeValue1 =
+                                                            null;
+                                                      });
+                                                    }
                                                   },
-                                                  text: 'Select Start Date',
+                                                  text: _model.pickerDateValue1 !=
+                                                          null
+                                                      ? '${_model.pickerDateValue1?.day}/${_model.pickerDateValue1?.month}/${_model.pickerDateValue1?.year} ${_model.pickerTimeValue1?.hour}:${_model.pickerTimeValue1?.minute}'
+                                                      : 'Select Start Time',
                                                   options: FFButtonOptions(
                                                     height: 40,
                                                     padding:
@@ -510,20 +616,50 @@ class _BookingWidgetState extends State<BookingWidget> {
                                               ),
                                               child: FFButtonWidget(
                                                 onPressed: () async {
-                                                  await showDatePicker(
-                                                      context: context,
-                                                      firstDate:
-                                                          getCurrentTimestamp,
-                                                      lastDate: DateTime(
-                                                          getCurrentTimestamp
-                                                                  .year +
-                                                              1));
-                                                  await showTimePicker(
-                                                      context: context,
-                                                      initialTime:
-                                                          TimeOfDay.now());
+                                                  final DateTime? pickedDate =
+                                                      await showDatePicker(
+                                                          context: context,
+                                                          initialDate: _model
+                                                                  .pickerDateValue2 ??
+                                                              DateTime.now(),
+                                                          firstDate: DateTime
+                                                              .now(),
+                                                          lastDate:
+                                                              DateTime(
+                                                                  DateTime.now()
+                                                                          .year +
+                                                                      1,
+                                                                  DateTime.now()
+                                                                      .month,
+                                                                  DateTime.now()
+                                                                      .day));
+                                                  final TimeOfDay? pickedTime =
+                                                      await showTimePicker(
+                                                          context: context,
+                                                          initialTime: _model
+                                                                  .pickerTimeValue2 ??
+                                                              TimeOfDay.now());
+
+                                                  if (pickedDate != null &&pickedTime != null) {
+                                                    setState(() {
+                                                      _model.pickerDateValue2 =
+                                                          pickedDate;
+                                                      _model.pickerTimeValue2 =
+                                                          pickedTime;
+                                                    });
+                                                  } else {
+                                                    setState(() {
+                                                      _model.pickerDateValue2 =
+                                                          null;
+                                                      _model.pickerTimeValue2 =
+                                                          null;
+                                                    });
+                                                  }
                                                 },
-                                                text: 'Select Expiry Date',
+                                                text: _model.pickerDateValue2 !=
+                                                        null
+                                                    ? '${_model.pickerDateValue2?.day}/${_model.pickerDateValue2?.month}/${_model.pickerDateValue2?.year} ${_model.pickerTimeValue2?.hour}:${_model.pickerTimeValue2?.minute}'
+                                                    : 'Select Start Time',
                                                 options: FFButtonOptions(
                                                   height: 40,
                                                   padding: EdgeInsetsDirectional
@@ -706,7 +842,9 @@ class _BookingWidgetState extends State<BookingWidget> {
                   child: Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 12),
                     child: FFButtonWidget(
-                      onPressed: () async {},
+                      onPressed: () async {
+                        createReservation();
+                      },
                       text: 'Next',
                       options: FFButtonOptions(
                         width: double.infinity,
