@@ -50,6 +50,7 @@ class _SearchLocationWidgetState extends State<SearchLocationWidget> {
           (json) => (json as List<dynamic>).map<ParkingLotInfo>((dynamic item) {
                 return ParkingLotInfo.fromJson(item);
               }).toList());
+              
       print(response.data.toString());
 
       if (response.statusCode == 200) {

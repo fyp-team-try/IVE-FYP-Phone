@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 
 import 'package:flutter/material.dart';
@@ -25,14 +27,19 @@ class BookingWidget extends StatefulWidget {
 
 class _BookingWidgetState extends State<BookingWidget> {
   late BookingModel _model;
+  List<VehicleInfo>? vehicleInfoList;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  late List<int> regPricingList, elecPricingList;
 
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => BookingModel());
-
+    regPricingList =
+        getPricingListByString(widget.parkingLotInfo.regularSpacePrices);
+    elecPricingList =
+        getPricingListByString(widget.parkingLotInfo.electricSpacePrices);
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {});
     GetVehicleInfo(context);
@@ -44,8 +51,6 @@ class _BookingWidgetState extends State<BookingWidget> {
 
     super.dispose();
   }
-
-  List<VehicleInfo>? vehicleInfoList;
 
   void GetVehicleInfo(BuildContext context) async {
     print('GetVehicleInfo()');
@@ -77,6 +82,35 @@ class _BookingWidgetState extends State<BookingWidget> {
     }
   }
 
+  int calculatePrice(
+      List<int> priceList, DateTime startDate, DateTime endDate) {
+    int remainingDuration = endDate.difference(startDate).inHours;
+    int currentHour = startDate.hour;
+    int totalPrice = 0;
+
+    while (remainingDuration > 0) {
+      totalPrice += priceList[currentHour];
+      currentHour = (currentHour + 1) % 24;
+      remainingDuration--;
+    }
+
+    return totalPrice;
+  }
+
+  List<int> getPricingListByString(String s) {
+    String jsonString = s;
+    jsonString = jsonString.replaceAll('time', '"time"');
+    jsonString = jsonString.replaceAll('price', '"price"');
+    jsonString = jsonString.replaceAllMapped(
+        RegExp(r'(\d{2}:\d{2})'), (match) => '"${match.group(0)}"');
+    List<dynamic> jsonData = jsonDecode(jsonString);
+
+    List<int> prices =
+        jsonData.map<int>((item) => item['price'].toInt()).toList();
+
+    return prices;
+  }
+
   void createReservation() async {
     int? vehicleID = vehicleInfoList
         ?.where((vehicle) => vehicle.vehicleLicense == _model.dropDownValue2)
@@ -105,11 +139,16 @@ class _BookingWidgetState extends State<BookingWidget> {
             ReservationRequestModel(
                 vehicleID: vehicleID,
                 lotID: lotID,
-                startTime: DateTime(startDate.year,startDate.month,startDate.day,startTime.hour,startTime.minute).toIso8601String(),
-                endTime: DateTime(endDate.year,endDate.month,endDate.day,endTime.hour,endTime.minute).toIso8601String(),
+                startTime: DateTime(startDate.year, startDate.month,
+                        startDate.day, startTime.hour, startTime.minute)
+                    .toIso8601String(),
+                endTime: DateTime(endDate.year, endDate.month, endDate.day,
+                        endTime.hour, endTime.minute)
+                    .toIso8601String(),
                 spaceType: spaceType.toUpperCase());
 
-        bool isRegSuccess = await createReservationRequest(reservationRequestModel, context,token);
+        bool isRegSuccess = await createReservationRequest(
+            reservationRequestModel, context, token);
 
         if (isRegSuccess) {
           await showDialog(
@@ -129,28 +168,29 @@ class _BookingWidgetState extends State<BookingWidget> {
               );
             },
           );
-          Navigator.pushNamed(context, '/locationDetail',arguments:widget.parkingLotInfo.lotID);
+          Navigator.pushNamed(context, '/locationDetail',
+              arguments: widget.parkingLotInfo.lotID);
         }
       } catch (e) {}
-    }else{
-          await showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text('Error '),
-                content: Text('Please select all fields.'),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text('OK'),
-                  ),
-                ],
-              );
-            },
+    } else {
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error '),
+            content: Text('Please select all fields.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('OK'),
+              ),
+            ],
           );
-        }
+        },
+      );
+    }
   }
 
   @override
@@ -642,7 +682,8 @@ class _BookingWidgetState extends State<BookingWidget> {
                                                                   .pickerTimeValue2 ??
                                                               TimeOfDay.now());
 
-                                                  if (pickedDate != null &&pickedTime != null) {
+                                                  if (pickedDate != null &&
+                                                      pickedTime != null) {
                                                     setState(() {
                                                       _model.pickerDateValue2 =
                                                           pickedDate;
@@ -819,7 +860,29 @@ class _BookingWidgetState extends State<BookingWidget> {
                                     ),
                                   ),
                                   Text(
-                                    '\$140',
+                                    _model.pickerDateValue1!=null&&_model.pickerTimeValue1!=null&&_model.pickerDateValue2!=null&&_model.pickerTimeValue2!=null&&_model.dropDownValue3!=null?'\$${(100 +
+                                            calculatePrice(
+                                                _model.dropDownValue3=="Regular"?regPricingList:elecPricingList,
+                                                DateTime(
+                                                    _model
+                                                        .pickerDateValue1!.year,
+                                                    _model.pickerDateValue1!
+                                                        .month,
+                                                    _model
+                                                        .pickerDateValue1!.day,
+                                                    _model
+                                                        .pickerTimeValue1!.hour,
+                                                    0),
+                                                DateTime(
+                                                    _model
+                                                        .pickerDateValue2!.year,
+                                                    _model.pickerDateValue2!
+                                                        .month,
+                                                    _model
+                                                        .pickerDateValue2!.day,
+                                                    _model
+                                                        .pickerTimeValue2!.hour,
+                                                    0))).toString()}':'',
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(

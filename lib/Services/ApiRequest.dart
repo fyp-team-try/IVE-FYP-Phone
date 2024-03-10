@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:user_app/Models/Api/ApiRequestModels.dart';
 import 'package:http/http.dart' as http;
@@ -48,6 +49,7 @@ class ApiRequest {
             'Authorization':'Bearer $token'
           });
       Map<String, dynamic> json = jsonDecode(response.body);
+      print(json['data']);
       ApiResponse<T> apiResponse = ApiResponse.fromJson(json, fromJsonT);
       return apiResponse;
     } catch (e) {}

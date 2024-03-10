@@ -19,6 +19,8 @@ class ParkingLotInfo {
   int maxReservationHours;
   int availableRegularSpaces;
   int availableElectricSpaces;
+  String regularSpacePrices;
+  String electricSpacePrices;
 
   ParkingLotInfo({
     required this.lotID,
@@ -39,6 +41,8 @@ class ParkingLotInfo {
     required this.maxReservationHours,
     required this.availableRegularSpaces,
     required this.availableElectricSpaces,
+    required this.regularSpacePrices,
+    required this.electricSpacePrices
   });
 
   factory ParkingLotInfo.fromJson(Map<String, dynamic> json) {
@@ -60,7 +64,9 @@ class ParkingLotInfo {
       minReservationWindowHours: json['minReservationWindowHours'],
       maxReservationHours: json['maxReservationHours'],
       availableRegularSpaces: json['availableRegularSpaces'],
-      availableElectricSpaces: json['availableElectricSpaces']
+      availableElectricSpaces: json['availableElectricSpaces'],
+      regularSpacePrices:json['regularSpacePrices'].toString(),
+      electricSpacePrices:json['electricSpacePrices'].toString(),
     );
   }
 
@@ -78,12 +84,14 @@ class ParkingLotInfo {
       'electricPlanSpaces': parkingLotInfo.electricPlanSpaces,
       'walkinReservedRatio': parkingLotInfo.walkinReservedRatio,
       'reservableOnlyRegularSpaces': parkingLotInfo.reservableOnlyRegularSpaces,
-      'reservableOnlyRegularSpaces': parkingLotInfo.reservableOnlyRegularSpaces,
+      'reservableOnlyElectricSpaces': parkingLotInfo.reservableOnlyRegularSpaces,
       'reservedDiscount': parkingLotInfo.reservedDiscount,
       'minReservationWindowHours': parkingLotInfo.minReservationWindowHours,
       'maxReservationHours': parkingLotInfo.maxReservationHours,
       'availableRegularSpaces': parkingLotInfo.availableRegularSpaces,
       'availableElectricSpaces': parkingLotInfo.availableElectricSpaces,
+      'regularSpacePrices':parkingLotInfo.availableRegularSpaces,
+      'electricSpacePrices':parkingLotInfo.availableElectricSpaces
     };
   }
 
