@@ -1,8 +1,7 @@
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 
 import 'package:flutter/material.dart';
-import 'package:user_app/Models/ParkingLotInfo.dart';
-import 'package:user_app/Screens/LocationPage/LocationDetailWidget.dart';
+import 'package:user_app/Models/Api/ResponseModels/ParkingLotInfo.dart';
 
 class LocationListItem extends StatelessWidget {
   final ParkingLotInfo parkingLotInfo;

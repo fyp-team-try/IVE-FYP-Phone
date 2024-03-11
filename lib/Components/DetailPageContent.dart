@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
-import 'package:user_app/Models/ParkingLotInfo.dart';
+import 'package:user_app/Models/Api/ResponseModels/ParkingLotInfo.dart';
 import 'package:user_app/Screens/Booking/BookingWidget.dart';
 
 class DetailPageContent extends StatelessWidget {

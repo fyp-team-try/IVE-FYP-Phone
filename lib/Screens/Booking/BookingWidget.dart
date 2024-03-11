@@ -7,7 +7,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:user_app/Models/Api/ApiResponse.dart';
 import 'package:user_app/Models/Api/RequestModels/ReservationRequestModel.dart';
-import 'package:user_app/Models/ParkingLotInfo.dart';
+import 'package:user_app/Models/Api/ResponseModels/ParkingLotInfo.dart';
+import 'package:user_app/Models/Api/ResponseModels/ParkingLotPrices.dart';
 import 'package:user_app/Models/VehicleInfo.dart';
 import 'package:user_app/Models/MyInfo.dart';
 import 'package:user_app/Providers/AuthProvider.dart';
@@ -30,16 +31,14 @@ class _BookingWidgetState extends State<BookingWidget> {
   List<VehicleInfo>? vehicleInfoList;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  late List<int> regPricingList, elecPricingList;
+  late List<ParkingLotPrices> regPricingList, elecPricingList;
 
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => BookingModel());
-    regPricingList =
-        getPricingListByString(widget.parkingLotInfo.regularSpacePrices);
-    elecPricingList =
-        getPricingListByString(widget.parkingLotInfo.electricSpacePrices);
+    regPricingList =widget.parkingLotInfo.regularSpacePrices;
+    elecPricingList =widget.parkingLotInfo.electricSpacePrices;
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {});
     GetVehicleInfo(context);
@@ -82,14 +81,14 @@ class _BookingWidgetState extends State<BookingWidget> {
     }
   }
 
-  int calculatePrice(
-      List<int> priceList, DateTime startDate, DateTime endDate) {
+  double calculatePrice(
+      List<ParkingLotPrices> priceList, DateTime startDate, DateTime endDate) {
     int remainingDuration = endDate.difference(startDate).inHours;
     int currentHour = startDate.hour;
-    int totalPrice = 0;
+    double totalPrice = 0;
 
     while (remainingDuration > 0) {
-      totalPrice += priceList[currentHour];
+      totalPrice += priceList[currentHour].price;
       currentHour = (currentHour + 1) % 24;
       remainingDuration--;
     }
@@ -862,7 +861,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                                   Text(
                                     _model.pickerDateValue1!=null&&_model.pickerTimeValue1!=null&&_model.pickerDateValue2!=null&&_model.pickerTimeValue2!=null&&_model.dropDownValue3!=null?'\$${(100 +
                                             calculatePrice(
-                                                _model.dropDownValue3=="Regular"?regPricingList:elecPricingList,
+                                                _model.dropDownValue3=="Regular"?widget.parkingLotInfo.regularSpacePrices:widget.parkingLotInfo.electricSpacePrices,
                                                 DateTime(
                                                     _model
                                                         .pickerDateValue1!.year,
@@ -882,7 +881,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                                                         .pickerDateValue2!.day,
                                                     _model
                                                         .pickerTimeValue2!.hour,
-                                                    0))).toString()}':'',
+                                                    0))).toStringAsFixed(1)}':'',
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(

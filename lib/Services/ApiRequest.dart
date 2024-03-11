@@ -49,10 +49,11 @@ class ApiRequest {
             'Authorization':'Bearer $token'
           });
       Map<String, dynamic> json = jsonDecode(response.body);
-      print(json['data']);
       ApiResponse<T> apiResponse = ApiResponse.fromJson(json, fromJsonT);
       return apiResponse;
-    } catch (e) {}
+    } catch (e) {
+      print(e.toString());
+    }
     throw Exception('Failed to load data');
   }
 }

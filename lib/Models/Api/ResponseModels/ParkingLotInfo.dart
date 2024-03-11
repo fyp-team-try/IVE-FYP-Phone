@@ -47,12 +47,12 @@ class ParkingLotInfo {
       required this.electricSpacePrices});
 
   factory ParkingLotInfo.fromJson(Map<String, dynamic> json) {
-    List<ParkingLotPrices> regularSpacePrices = json['regularSpacePrices']
-        .map<ParkingLotPrices>((json) => ParkingLotPrices.fromJson(json))
-        .toList();
-    List<ParkingLotPrices> electricSpacePrices = json['electricSpacePrices']
-        .map<ParkingLotPrices>((json) => ParkingLotPrices.fromJson(json))
-        .toList();
+    List<ParkingLotPrices> regularSpacePrices = json['regularSpacePrices']!=null?
+        json['regularSpacePrices'].map<ParkingLotPrices>((json) => ParkingLotPrices.fromJson(json))
+        .toList():[];
+    List<ParkingLotPrices> electricSpacePrices = json['electricSpacePrices']!=null?
+        json['electricSpacePrices'].map<ParkingLotPrices>((json) => ParkingLotPrices.fromJson(json))
+        .toList():[];
 
     return ParkingLotInfo(
       lotID: json['lotID'],
