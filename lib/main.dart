@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:user_app/Providers/AuthProvider.dart';
 import 'package:user_app/Screens/FunctionPage/FunctionPageWidget.dart';
+import 'package:user_app/Screens/History/HistoryWidget.dart';
 import 'package:user_app/Screens/LocationPage/LocationDetailWidget.dart';
 import 'package:user_app/Screens/LocationPage/searchLocationWidget.dart';
 import 'package:user_app/Screens/Payment/paymentwidget.dart';
@@ -58,7 +59,8 @@ class MyApp extends StatelessWidget {
         '/location': (context) => SearchLocationWidget(),
         '/locationDetail': (context) => LocationDetailWidget(),
         '/plan': (context) => PlanWidget(),
-        '/payment':(context)=>PaymentWidget()
+        '/payment':(context)=>PaymentWidget(),
+        '/history':(context)=>HistoryWidget()
       },
     );
   }
