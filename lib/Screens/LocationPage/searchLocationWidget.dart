@@ -1,7 +1,3 @@
-import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:user_app/Components/LocationListItem.dart';
@@ -11,8 +7,6 @@ import 'package:user_app/Services/ApiRequest.dart';
 
 import 'searchLocationModel.dart';
 export 'searchLocationModel.dart';
-
-import 'package:http/http.dart' as http;
 
 class SearchLocationWidget extends StatefulWidget {
   const SearchLocationWidget({super.key});

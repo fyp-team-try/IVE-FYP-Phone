@@ -123,7 +123,6 @@ class _BookingWidgetState extends State<BookingWidget> {
     String? spaceType = _model.dropDownValue3;
 
     bool inputsNotNull = vehicleID != null &&
-        lotID != null &&
         startDate != null &&
         startTime != null &&
         endDate != null &&

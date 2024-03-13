@@ -3,7 +3,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:user_app/Providers/AuthProvider.dart';
-import 'package:user_app/Screens/Booking/bookingwidget.dart';
 import 'package:user_app/Screens/FunctionPage/FunctionPageWidget.dart';
 import 'package:user_app/Screens/LocationPage/LocationDetailWidget.dart';
 import 'package:user_app/Screens/LocationPage/searchLocationWidget.dart';

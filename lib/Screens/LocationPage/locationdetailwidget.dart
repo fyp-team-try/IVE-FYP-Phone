@@ -9,8 +9,6 @@ import 'package:user_app/Services/ApiRequest.dart';
 import 'locationdetailmodel.dart';
 export 'locationdetailmodel.dart';
 
-import 'package:http/http.dart' as http;
-
 class LocationDetailWidget extends StatefulWidget {
   const LocationDetailWidget({super.key});
 
@@ -53,7 +51,7 @@ class _LocationDetailWidgetState extends State<LocationDetailWidget> {
 
   Future<ParkingLotInfo?> GetParkingLotInfo() async {
     try {
-      ApiRequest api = new ApiRequest();
+      ApiRequest api = ApiRequest();
 
       ApiResponse<ParkingLotInfo> response = await api.get(
           'parkinglots/${parkingLotID.toString()}',
@@ -67,6 +65,7 @@ class _LocationDetailWidgetState extends State<LocationDetailWidget> {
           duration: Duration(seconds: 5),
         ));
       }
+      return null;
     } catch (ex) {
       return null;
     }

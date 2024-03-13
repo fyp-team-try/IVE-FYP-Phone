@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:user_app/Models/Api/ApiRequestModels.dart';

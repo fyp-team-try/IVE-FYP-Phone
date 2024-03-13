@@ -131,8 +131,7 @@ class _PlanWidgetState extends State<PlanWidget> {
                                             Align(
                                               alignment:
                                                   AlignmentDirectional(0, 0),
-                                              child:
-                                                  FlutterFlowDropDown(
+                                              child: FlutterFlowDropDown(
                                                 options: ['Option 1'],
                                                 onChanged: (val) => setState(
                                                     () => _model
@@ -205,8 +204,7 @@ class _PlanWidgetState extends State<PlanWidget> {
                                             Align(
                                               alignment:
                                                   AlignmentDirectional(0, 0),
-                                              child:
-                                                  FlutterFlowDropDown(
+                                              child: FlutterFlowDropDown(
                                                 options: ['Option 1'],
                                                 onChanged: (val) => setState(
                                                     () => _model
@@ -279,8 +277,7 @@ class _PlanWidgetState extends State<PlanWidget> {
                                             Align(
                                               alignment:
                                                   AlignmentDirectional(0, 0),
-                                              child:
-                                                  FlutterFlowDropDown(
+                                              child: FlutterFlowDropDown(
                                                 options: ['Option 1'],
                                                 onChanged: (val) => setState(
                                                     () => _model
@@ -405,11 +402,9 @@ class _PlanWidgetState extends State<PlanWidget> {
                                                       initialDate:
                                                           getCurrentTimestamp,
                                                       firstDate:
-                                                          (getCurrentTimestamp ??
-                                                              DateTime(1900)),
+                                                          getCurrentTimestamp,
                                                       lastDate:
-                                                          (getCurrentTimestamp ??
-                                                              DateTime(2050)),
+                                                          getCurrentTimestamp,
                                                     );
 
                                                     if (_datePicked2Date !=
