@@ -9,6 +9,13 @@ import 'package:user_app/Screens/LocationPage/LocationDetailWidget.dart';
 import 'package:user_app/Screens/LocationPage/searchLocationWidget.dart';
 import 'package:user_app/Screens/Payment/paymentwidget.dart';
 import 'package:user_app/Screens/Plan/planwidget.dart';
+import 'package:user_app/Screens/Setting/AddCreditCardWidget.dart';
+import 'package:user_app/Screens/Setting/AddVehicleWidget.dart';
+import 'package:user_app/Screens/Setting/EditPasswordWidget.dart';
+import 'package:user_app/Screens/Setting/EditProfileWidget.dart';
+import 'package:user_app/Screens/Setting/ManageVehicleWidget.dart';
+import 'package:user_app/Screens/Setting/PaymentOptionWidget.dart';
+import 'package:user_app/Screens/Setting/SettingWidget.dart';
 import 'package:user_app/Screens/register.dart';
 
 import 'Screens/Auth/LoginScreen.dart';
@@ -60,7 +67,15 @@ class MyApp extends StatelessWidget {
         '/locationDetail': (context) => LocationDetailWidget(),
         '/plan': (context) => PlanWidget(),
         '/payment':(context)=>PaymentWidget(),
-        '/history':(context)=>HistoryWidget()
+        '/history':(context)=>HistoryWidget(),
+        '/Setting':(context)=>SettingWidget(),
+        '/PaymentOption':(context)=>PaymentOptionsWidget(),
+        '/EditPassword':(context)=>EditPasswordWidget(),
+        '/EditProfile':(context)=>EditProfileWidget(),
+        '/AddCreditCard':(context)=>AddCreditCardWidget(),
+        '/AddVehicle':(context)=>AddVehicleWidget(),
+        '/ManageVehicle':(context)=>ManageVehicleWidget(),
+
       },
     );
   }
