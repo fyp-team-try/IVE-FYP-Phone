@@ -75,7 +75,6 @@ class MyApp extends StatelessWidget {
         '/AddCreditCard':(context)=>AddCreditCardWidget(),
         '/AddVehicle':(context)=>AddVehicleWidget(),
         '/ManageVehicle':(context)=>ManageVehicleWidget(),
-
       },
     );
   }

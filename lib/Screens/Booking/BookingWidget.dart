@@ -67,7 +67,6 @@ class _BookingWidgetState extends State<BookingWidget> {
               }).toList(),
           token);
 
-      print('Response2:${response2.statusCode}');
       if (response2.statusCode == 200) {
         setState(() => vehicleInfoList = response2.data);
       } else {

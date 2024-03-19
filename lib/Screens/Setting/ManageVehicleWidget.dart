@@ -1,5 +1,12 @@
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:user_app/Components/ManageVehicleItem.dart';
+import 'package:user_app/Models/Api/ApiResponse.dart';
+import 'package:user_app/Models/MyInfo.dart';
+import 'package:user_app/Models/VehicleInfo.dart';
+import 'package:user_app/Providers/AuthProvider.dart';
+import 'package:user_app/Services/ApiRequest.dart';
 import 'ManageVehicleModel.dart';
 export 'ManageVehicleModel.dart';
 
@@ -13,12 +20,14 @@ class ManageVehicleWidget extends StatefulWidget {
 class _ManageVehicleWidgetState extends State<ManageVehicleWidget> {
   late ManageVehicleModel _model;
 
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  List<VehicleInfo>? vehicleList = <VehicleInfo>[];
 
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => ManageVehicleModel());
+    GetParkingLots();
   }
 
   @override
@@ -26,6 +35,40 @@ class _ManageVehicleWidgetState extends State<ManageVehicleWidget> {
     _model.dispose();
 
     super.dispose();
+  }
+
+    void GetParkingLots() async {
+    try {
+      ApiRequest api = ApiRequest();
+
+      String token = context.read<AuthProvider>().getUserInfo().token;
+      ApiResponse<MyInfo> idResponse = await api.get(
+          'me', (json) => MyInfo.fromJson(json as Map<String, dynamic>), token);
+
+      ApiResponse<List<VehicleInfo>> response = await api.get(
+          'users/${idResponse.data?.userID}/vehicles',
+          (json) => (json as List<dynamic>).map<VehicleInfo>((dynamic item) {
+                return VehicleInfo.fromJson(item);
+              }).toList(),token);
+
+      print(response.errorMessage);
+      print(idResponse.errorMessage);
+      if (response.statusCode == 200) {
+        setState(() {
+          vehicleList = response.data;
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Data Fetch failed'),
+          duration: Duration(seconds: 5),
+        ));
+      }
+    } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(e.toString()),
+          duration: Duration(seconds: 5),
+        ));
+    }
   }
 
   @override
@@ -58,7 +101,6 @@ class _ManageVehicleWidgetState extends State<ManageVehicleWidget> {
             children: [
               Container(
                 width: 468,
-                height: 279,
                 decoration: BoxDecoration(
                   color: FlutterFlowTheme.of(context).secondaryBackground,
                 ),
@@ -74,177 +116,29 @@ class _ManageVehicleWidgetState extends State<ManageVehicleWidget> {
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
                             child: Text(
-                              'My Car',
+                              'My vehicle',
                               style: FlutterFlowTheme.of(context).titleLarge,
                             ),
                           ),
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
-                      child: Container(
-                        width: double.infinity,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 4,
-                              color: Color(0x320E151B),
-                              offset: Offset(0, 1),
-                            )
-                          ],
-                          borderRadius: BorderRadius.circular(12),
+                    vehicleList == null
+                    ? Center(child: CircularProgressIndicator())
+                    : ListView.builder(
+                        padding: EdgeInsets.fromLTRB(
+                          0,
+                          8,
+                          0,
+                          0,
                         ),
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(16, 8, 8, 8),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Icon(
-                                Icons.directions_car,
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryText,
-                                size: 65,
-                              ),
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 0, 0, 8),
-                                      child: Text(
-                                        'BB 4567',
-                                        style: FlutterFlowTheme.of(context)
-                                            .titleSmall
-                                            .override(
-                                              fontFamily: 'Readex Pro',
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryText,
-                                              fontSize: 22,
-                                            ),
-                                      ),
-                                    ),
-                                    Text(
-                                      'Regular',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily: 'Readex Pro',
-                                            fontSize: 15,
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              FlutterFlowIconButton(
-                                borderColor: Colors.transparent,
-                                borderRadius: 30,
-                                borderWidth: 1,
-                                buttonSize: 35,
-                                icon: Icon(
-                                  Icons.delete_outline_rounded,
-                                  color: Color(0xFFE86969),
-                                  size: 20,
-                                ),
-                                onPressed: () {
-                                  print('IconButton pressed ...');
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
-                      child: Container(
-                        width: double.infinity,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 4,
-                              color: Color(0x320E151B),
-                              offset: Offset(0, 1),
-                            )
-                          ],
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(16, 8, 8, 8),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Icon(
-                                Icons.directions_car,
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryText,
-                                size: 65,
-                              ),
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 0, 0, 8),
-                                      child: Text(
-                                        'AA 1234',
-                                        style: FlutterFlowTheme.of(context)
-                                            .titleSmall
-                                            .override(
-                                              fontFamily: 'Readex Pro',
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryText,
-                                              fontSize: 22,
-                                            ),
-                                      ),
-                                    ),
-                                    Text(
-                                      'Electric',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              FlutterFlowIconButton(
-                                borderColor: Colors.transparent,
-                                borderRadius: 30,
-                                borderWidth: 1,
-                                buttonSize: 35,
-                                icon: Icon(
-                                  Icons.delete_outline_rounded,
-                                  color: Color(0xFFE86969),
-                                  size: 20,
-                                ),
-                                onPressed: () {
-                                  print('IconButton pressed ...');
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        itemCount: vehicleList?.length,
+                        itemBuilder: (context, index) {
+                          VehicleInfo currItem = vehicleList![index];
+                          return ManageVehicleItem(vehicleInfo: currItem);
+                        }),
                   ],
                 ),
               ),
@@ -299,7 +193,7 @@ class _ManageVehicleWidgetState extends State<ManageVehicleWidget> {
                             ),
                           ),
                           Text(
-                            'Add Car',
+                            'Add vehicle',
                             style: FlutterFlowTheme.of(context).bodyMedium,
                           ),
                         ],

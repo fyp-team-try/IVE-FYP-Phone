@@ -135,7 +135,7 @@ class _AddVehicleWidgetState extends State<AddVehicleWidget> {
                             fontFamily: 'Readex Pro',
                             color: FlutterFlowTheme.of(context).secondaryText,
                           ),
-                      hintText: 'Please select car type',
+                      hintText: 'Please select vehicle type',
                       icon: Icon(
                         Icons.keyboard_arrow_down_rounded,
                         color: FlutterFlowTheme.of(context).secondaryText,

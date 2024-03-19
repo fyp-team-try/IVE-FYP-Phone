@@ -1,5 +1,8 @@
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:provider/provider.dart';
+import 'package:user_app/Providers/AuthProvider.dart';
 import 'SettingModel.dart';
 export 'SettingModel.dart';
 
@@ -15,22 +18,31 @@ class _SettingWidgetState extends State<SettingWidget> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
+  bool _loading = false;
+  String email = "";
+  String userName = "";
+
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => SettingModel());
+    String name = context.read<AuthProvider>().getUserInfo().userName;
+    String email = context.read<AuthProvider>().getUserInfo().email;
+    setState(() {
+      this.email = email;
+      userName =name;
+    });
   }
 
   @override
   void dispose() {
     _model.dispose();
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ModalProgressHUD(inAsyncCall: _loading, child: GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
           : FocusScope.of(context).unfocus(),
@@ -98,7 +110,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'User',
+                                userName,
                                 style:
                                     FlutterFlowTheme.of(context).headlineSmall,
                               ),
@@ -106,7 +118,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                 padding:
                                     EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
                                 child: Text(
-                                  'user@gmail.com',
+                                  email!=""?email:"Email not set",
                                   style:
                                       FlutterFlowTheme.of(context).labelMedium,
                                 ),
@@ -252,7 +264,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                   hoverColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   onTap: () async {
-                    Navigator.pushNamed(context, '/PaymentOption');
+                    Navigator.pushNamed(context, '/ManageVehicle');
                   },
                   child: Container(
                     width: double.infinity,
@@ -307,6 +319,6 @@ class _SettingWidgetState extends State<SettingWidget> {
           ),
         ),
       ),
-    );
+    ));
   }
 }
