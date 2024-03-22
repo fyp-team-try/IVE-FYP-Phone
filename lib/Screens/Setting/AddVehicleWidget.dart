@@ -1,5 +1,9 @@
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:user_app/Models/Api/RequestModels/AddVehicleRequestModel.dart';
+import 'package:user_app/Providers/AuthProvider.dart';
+import 'package:user_app/Services/request/AddVehicleRequest.dart';
 import 'AddVehicleModel.dart';
 export 'AddVehicleModel.dart';
 
@@ -29,6 +33,59 @@ class _AddVehicleWidgetState extends State<AddVehicleWidget> {
     _model.dispose();
 
     super.dispose();
+  }
+
+  void addVehicle() async {
+    AddVehicleRequestModel data;
+    String vehicleLicense = _model.textController.text;
+    String? vehicleType = _model.dropDownValue;
+    String token = context.read<AuthProvider>().getUserInfo().token;
+
+    if (vehicleType == null || vehicleLicense == "") {
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('Please fill in/select all the fields.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
+    data = AddVehicleRequestModel(
+        vehicleLicense: vehicleLicense, vehicleType: vehicleType.toUpperCase());
+    bool isAddSuccess = await addVehicleRequest(data, context, token);
+
+    if (isAddSuccess) {
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Sucessfully added'),
+            content: Text('You have add a vehicle.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
   }
 
   @override
@@ -155,9 +212,9 @@ class _AddVehicleWidgetState extends State<AddVehicleWidget> {
                     padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 12),
                     child: FFButtonWidget(
                       onPressed: () {
-                        print('Button pressed ...');
+                        addVehicle();
                       },
-                      text: 'Submit Card',
+                      text: 'Add Vehicle',
                       icon: Icon(
                         Icons.directions_car,
                         size: 15,

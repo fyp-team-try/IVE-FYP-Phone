@@ -69,7 +69,7 @@ class _FunctionPageWidgetState extends State<FunctionPageWidget> {
                         text: "booking",
                         imagePath: "assets/images/booking.png"),
                     FunctionPageButton(
-                        onTap: () => testOnTap(),
+                        onTap: (){Navigator.pushNamed(context, "/home");},
                         text: "Message",
                         imagePath: "assets/images/message.png"),
                     FunctionPageButton(

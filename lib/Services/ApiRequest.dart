@@ -52,6 +52,6 @@ class ApiRequest {
     } catch (e) {
       print(e.toString());
     }
-    throw Exception('Failed to load data');
+    throw Exception('Failed to get data');
   }
 }
