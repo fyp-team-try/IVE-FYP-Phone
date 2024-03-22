@@ -55,7 +55,7 @@ class ManageVehicleItem extends StatelessWidget {
                       ),
                     ),
                     Text(
-                        vehicleInfo.vehicleType == ""?"Regular":"Eletric",
+                        vehicleInfo.vehicleType == 0?"Regular":"Eletric",
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             fontFamily: 'Readex Pro',
                             fontSize: 15,
