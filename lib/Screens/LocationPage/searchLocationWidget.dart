@@ -45,7 +45,6 @@ class _SearchLocationWidgetState extends State<SearchLocationWidget> {
                 return ParkingLotInfo.fromJson(item);
               }).toList());
               
-      print(response.data.toString());
 
       if (response.statusCode == 200) {
         setState(() {
