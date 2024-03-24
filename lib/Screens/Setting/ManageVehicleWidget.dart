@@ -27,7 +27,7 @@ class _ManageVehicleWidgetState extends State<ManageVehicleWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => ManageVehicleModel());
-    GetParkingLots();
+    GetVehicles();
   }
 
   @override
@@ -37,7 +37,7 @@ class _ManageVehicleWidgetState extends State<ManageVehicleWidget> {
     super.dispose();
   }
 
-    void GetParkingLots() async {
+    void GetVehicles() async {
     try {
       ApiRequest api = ApiRequest();
 

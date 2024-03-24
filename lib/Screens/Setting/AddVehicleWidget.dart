@@ -84,7 +84,7 @@ class _AddVehicleWidgetState extends State<AddVehicleWidget> {
           );
         },
       );
-      return;
+      Navigator.pushNamed(context, '/ManageVehicle');
     }
   }
 

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:user_app/Providers/AuthProvider.dart';
 import 'package:user_app/Screens/FunctionPage/FunctionPageWidget.dart';
 import 'package:user_app/Screens/History/HistoryWidget.dart';
+import 'package:user_app/Screens/History/BookingHistoryModWidget.dart';
 import 'package:user_app/Screens/LocationPage/LocationDetailWidget.dart';
 import 'package:user_app/Screens/LocationPage/searchLocationWidget.dart';
 import 'package:user_app/Screens/Payment/paymentwidget.dart';
@@ -68,6 +69,7 @@ class MyApp extends StatelessWidget {
         '/plan': (context) => PlanWidget(),
         '/payment':(context)=>PaymentWidget(),
         '/history':(context)=>HistoryWidget(),
+        '/BookingHistory':(context)=>HistoryModifybookingWidget(),
         '/Setting':(context)=>SettingWidget(),
         '/PaymentOption':(context)=>PaymentOptionsWidget(),
         '/EditPassword':(context)=>EditPasswordWidget(),
