@@ -4,33 +4,33 @@ import 'package:user_app/Models/ParkingRecordInfo.dart';
 
 class ParkingSessionInfo {
   int sessionID;
-  //int lotID;
-  //String lotName;
-  //String vehicleLicense;
-  //double? totalPrice;
-  //List<ParkingRecordInfo>? records;
+  int lotID;
+  String lotName;
+  String vehicleLicense;
+  double? totalPrice;
+  List<ParkingRecordInfo> records;
 
   ParkingSessionInfo(
       {required this.sessionID,
-      //required this.lotID,
-      //required this.lotName,
-      //required this.vehicleLicense,
-      //required this.totalPrice,
-      //required this.records
+      required this.lotID,
+      required this.lotName,
+      required this.vehicleLicense,
+      required this.totalPrice,
+      required this.records
       });
 
   factory ParkingSessionInfo.fromJson(Map<String, dynamic> json) {
-    /*List<ParkingRecordInfo> prRecords = json['records']!=null?
-        json['records'].map<ParkingRecordInfo>((json) => ParkingRecordInfo.fromJson(json))
-        .toList():[];*/
+    List<ParkingRecordInfo> parkingRecordList = json['data']!=null?
+        json['data'].map<ParkingRecordInfo>((json) => ParkingRecordInfo.fromJson(json as Map<String,dynamic>))
+        .toList():[];
 
     return ParkingSessionInfo(
         sessionID: json['sessionID'],
-        //lotID: json['lotID'],
-        //lotName: json['lotName'],
-        //vehicleLicense: json['vehicleLicense'],
-        //totalPrice: json['totalPrice']
-        //records: prRecords
+        lotID: json['lotID'],
+        lotName: json['lotName'],
+        vehicleLicense: json['vehicleLicense'],
+        totalPrice: json['totalPrice'],
+        records: parkingRecordList
         );
   }
 

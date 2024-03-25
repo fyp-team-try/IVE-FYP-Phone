@@ -24,14 +24,15 @@ class ParkingRecordInfo {
 
   factory ParkingRecordInfo.fromJson(Map<String, dynamic> json) {
     return ParkingRecordInfo(
-        parkingRecordID: json['parkingRecordID'],
-        period: json['period'],
-        entryTime: json['entryTime'],
-        exitTime: json['exitTime'],
-        //reservation: json['reservation'],
-        price: json['price'],
-        spaceType: json['spaceType'],
-        paymentStatus: json['paymentStatus']);
+      parkingRecordID: json['parkingRecordID'],
+      period: json['period'],
+      entryTime: json['entryTime'],
+      exitTime: json['exitTime'],
+      //reservation: json['reservation'],
+      price: json['price'],
+      spaceType: json['spaceType'],
+      paymentStatus: json['paymentStatus']
+    );
   }
 
   static Map<String, dynamic> toMap(ParkingRecordInfo parkingRecordinfo) {

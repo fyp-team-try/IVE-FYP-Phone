@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:user_app/Components/LocationListItem.dart';
@@ -19,6 +21,7 @@ class _SearchLocationWidgetState extends State<SearchLocationWidget> {
   late SearchLocationModel _model;
 
   List<ParkingLotInfo>? items = <ParkingLotInfo>[];
+  List<ParkingLotInfo>? displayItems = <ParkingLotInfo>[];
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
@@ -49,6 +52,7 @@ class _SearchLocationWidgetState extends State<SearchLocationWidget> {
       if (response.statusCode == 200) {
         setState(() {
           items = response.data;
+          displayItems = items;
         });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -57,6 +61,24 @@ class _SearchLocationWidgetState extends State<SearchLocationWidget> {
         ));
       }
     } catch (e) {}
+  }
+
+  void search(){
+    String searchBarText = _model.textController.text;
+    String? chipsValue = _model.choiceChipsValue;
+
+    print(searchBarText);
+    print(chipsValue);
+
+    if(searchBarText!=""){
+      setState(() {
+        displayItems=items?.where((parkingLot) => parkingLot.name.toLowerCase().contains(searchBarText.toLowerCase())).toList();
+      });
+    }else{
+      setState(() {
+        displayItems = items;
+      });
+    }
   }
 
   @override
@@ -146,6 +168,7 @@ class _SearchLocationWidgetState extends State<SearchLocationWidget> {
                     cursorColor: FlutterFlowTheme.of(context).primary,
                     validator:
                         _model.textControllerValidator.asValidator(context),
+                      onChanged: (value)=>search(),
                   ),
                 ),
                 SingleChildScrollView(
@@ -164,7 +187,10 @@ class _SearchLocationWidgetState extends State<SearchLocationWidget> {
                             ChipData('Tsim Sha Tsui')
                           ],
                           onChanged: (val) => setState(
-                              () => _model.choiceChipsValue = val?.firstOrNull),
+                              () {                          
+                                 _model.choiceChipsValue = val?.firstOrNull;
+                                 search();
+                              }),
                           selectedChipStyle: ChipStyle(
                             backgroundColor:
                                 FlutterFlowTheme.of(context).primary,
@@ -227,7 +253,7 @@ class _SearchLocationWidgetState extends State<SearchLocationWidget> {
                     style: FlutterFlowTheme.of(context).labelMedium,
                   ),
                 ),
-                items!.isEmpty
+                displayItems!.isEmpty
                     ? Center(child: CircularProgressIndicator())
                     : ListView.builder(
                         padding: EdgeInsets.fromLTRB(
@@ -238,9 +264,9 @@ class _SearchLocationWidgetState extends State<SearchLocationWidget> {
                         ),
                         shrinkWrap: true,
                         scrollDirection: Axis.vertical,
-                        itemCount: items?.length,
+                        itemCount: displayItems?.length,
                         itemBuilder: (context, index) {
-                          ParkingLotInfo currItem = items![index];
+                          ParkingLotInfo currItem = displayItems![index];
                           return LocationListItem(parkingLotInfo: currItem);
                         }),
               ],

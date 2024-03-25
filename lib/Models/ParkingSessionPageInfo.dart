@@ -10,7 +10,7 @@ class ParkingSessionPageInfo {
   int totalPages;
   bool hasNext;
   bool hasPrevious;
-  List<ParkingSessionInfo> parkingSessionList;
+  List<ParkingSessionInfo>? parkingSessionList;
 
   ParkingSessionPageInfo(
       {required this.currentPage,

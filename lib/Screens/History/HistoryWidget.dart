@@ -140,11 +140,11 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                                     shrinkWrap: true,
                                     scrollDirection: Axis.vertical,
                                     itemCount: parkingSessionPage
-                                        ?.parkingSessionList.length,
+                                        ?.parkingSessionList?.length,
                                     itemBuilder: (context, index) {
                                       ParkingSessionInfo currItem =
                                           parkingSessionPage!
-                                              .parkingSessionList[index];
+                                              .parkingSessionList![index];
                                       return ParkingRecordItem(
                                           parkingSessionInfo: currItem);
                                     }),
