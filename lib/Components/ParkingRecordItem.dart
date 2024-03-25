@@ -1,16 +1,24 @@
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 
 import 'package:flutter/material.dart';
-import 'package:user_app/Models/Api/ResponseModels/ParkingLotInfo.dart';
 import 'package:user_app/Models/ParkingSessionInfo.dart';
 
 class ParkingRecordItem extends StatelessWidget {
   final ParkingSessionInfo parkingSessionInfo;
 
+
+  
+
   const ParkingRecordItem({required this.parkingSessionInfo});
 
+  
   @override
   Widget build(BuildContext context) {
+    String enterDateString = "${parkingSessionInfo.entryTime.day}-${parkingSessionInfo.entryTime.month}-${parkingSessionInfo.entryTime.year}";
+    String exitDateString = "${parkingSessionInfo.exitTime?.day}-${parkingSessionInfo.exitTime?.month}-${parkingSessionInfo.exitTime?.year}";
+    String enterTimeString = "${parkingSessionInfo.entryTime.hour.toString().padLeft(2, '0')}:${parkingSessionInfo.entryTime.minute.toString().padLeft(2, '0')}";
+    String exitTimeString = "${parkingSessionInfo.exitTime?.hour.toString().padLeft(2, '0')}:${parkingSessionInfo.exitTime?.minute.toString().padLeft(2, '0')}";
+
     return Padding(
       padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
       child: Container(
@@ -45,13 +53,13 @@ class ParkingRecordItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Car Slot A',
+                        parkingSessionInfo.lotName,
                         style: FlutterFlowTheme.of(context).bodyLarge,
                       ),
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
                         child: Text(
-                          '7-3-2024 to 7-3-2024',
+                          '$enterDateString to $exitDateString',
                           style: FlutterFlowTheme.of(context).labelSmall,
                         ),
                       ),
@@ -67,14 +75,14 @@ class ParkingRecordItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      '\$50.00',
+                      "\$${parkingSessionInfo.totalPrice}",
                       textAlign: TextAlign.end,
                       style: FlutterFlowTheme.of(context).titleLarge,
                     ),
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
                       child: Text(
-                        '12:00pm to 04:45pm',
+                        '${enterTimeString} to $exitTimeString',
                         textAlign: TextAlign.end,
                         style: FlutterFlowTheme.of(context).labelSmall,
                       ),

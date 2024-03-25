@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 class ParkingRecordInfo {
   int parkingRecordID;
   double period;
-  TimeOfDay entryTime;
-  TimeOfDay? exitTime;
+  DateTime entryTime;
+  DateTime? exitTime;
   // reservation;
   double price;
   String spaceType;

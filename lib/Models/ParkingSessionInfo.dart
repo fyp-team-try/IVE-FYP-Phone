@@ -7,14 +7,19 @@ class ParkingSessionInfo {
   int lotID;
   String lotName;
   String vehicleLicense;
+  DateTime entryTime;
+  DateTime? exitTime;
   double? totalPrice;
   List<ParkingRecordInfo> records;
+
 
   ParkingSessionInfo(
       {required this.sessionID,
       required this.lotID,
       required this.lotName,
       required this.vehicleLicense,
+      required this.entryTime,
+      required this.exitTime,
       required this.totalPrice,
       required this.records
       });
@@ -24,11 +29,14 @@ class ParkingSessionInfo {
         json['data'].map<ParkingRecordInfo>((json) => ParkingRecordInfo.fromJson(json as Map<String,dynamic>))
         .toList():[];
 
+
     return ParkingSessionInfo(
         sessionID: json['sessionID'],
         lotID: json['lotID'],
         lotName: json['lotName'],
         vehicleLicense: json['vehicleLicense'],
+        entryTime: DateTime.parse(json['entryTime']),
+        exitTime: DateTime.parse(json['exitTime']),
         totalPrice: json['totalPrice'],
         records: parkingRecordList
         );
