@@ -59,7 +59,7 @@ class ParkingRecordItem extends StatelessWidget {
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
                         child: Text(
-                          '$enterDateString to $exitDateString',
+                          parkingSessionInfo.exitTime!=null?'$enterDateString to $exitDateString':'Not exit yet',
                           style: FlutterFlowTheme.of(context).labelSmall,
                         ),
                       ),
@@ -75,14 +75,13 @@ class ParkingRecordItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      "\$${parkingSessionInfo.totalPrice}",
+                      "\$${parkingSessionInfo.totalPrice??0.0}",
                       textAlign: TextAlign.end,
                       style: FlutterFlowTheme.of(context).titleLarge,
                     ),
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
-                      child: Text(
-                        '${enterTimeString} to $exitTimeString',
+                      child: Text(parkingSessionInfo.exitTime!=null?'${enterTimeString} to $exitTimeString':'',
                         textAlign: TextAlign.end,
                         style: FlutterFlowTheme.of(context).labelSmall,
                       ),

@@ -110,7 +110,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(24, 20, 0, 0),
                         child: Text(
-                          'Parking Reord',
+                          'Parking Record',
                           textAlign: TextAlign.start,
                           style: FlutterFlowTheme.of(context)
                               .headlineMedium
