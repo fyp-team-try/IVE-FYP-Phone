@@ -1,15 +1,73 @@
 import 'package:flutter/material.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:user_app/Models/Api/ResponseModels/ParkingLotInfo.dart';
+import 'package:user_app/Models/GroupedParkingPrices.dart';
 import 'package:user_app/Screens/Booking/BookingWidget.dart';
+
+import '../Models/Api/ResponseModels/ParkingLotPrices.dart';
 
 class DetailPageContent extends StatelessWidget {
   final ParkingLotInfo parkingLotInfo;
 
   const DetailPageContent({required this.parkingLotInfo});
 
+  List<GroupedParkingPrices> groupPriceList(List<ParkingLotPrices> priceList) {
+    List<GroupedParkingPrices> groupedParkingPrices = [];
+
+    for (int i = 0; i < priceList.length; i++) {
+      ParkingLotPrices curr = priceList[i];
+      if (groupedParkingPrices.isEmpty ||
+          curr.price != groupedParkingPrices.last.price) {
+        groupedParkingPrices.add(GroupedParkingPrices(
+            StarTime: curr.time, EndTime: curr.time, price: curr.price));
+      } else if (groupedParkingPrices.last.price == curr.price) {
+        groupedParkingPrices.last.endTime = curr.time;
+      }
+    }
+    return groupedParkingPrices;
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<GroupedParkingPrices> groupedRegParkingPrices =
+        groupPriceList(parkingLotInfo.regularSpacePrices);
+    List<GroupedParkingPrices> groupedElecParkingPrices =
+        groupPriceList(parkingLotInfo.electricSpacePrices);
+    List<Widget> regPriceListChildren = [];
+    List<Widget> elecPriceListChildren = [];
+
+    for (var priceGroup in groupedRegParkingPrices) {
+      regPriceListChildren.add(
+        Align(
+          alignment: AlignmentDirectional(0, 0),
+          child: Text(
+            '${priceGroup.StarTime.hour.toString().padLeft(2, '0')}${priceGroup.StarTime.minute.toString().padLeft(2, '0')}-${priceGroup.EndTime.hour.toString().padLeft(2, '0')}59  (\$${priceGroup.price}/Hour)',
+            textAlign: TextAlign.center,
+            style: FlutterFlowTheme.of(context).bodyMedium.override(
+                  fontFamily: 'Readex Pro',
+                  fontSize: 20,
+                ),
+          ),
+        ),
+      );
+    }
+
+    for (var priceGroup in groupedElecParkingPrices) {
+      elecPriceListChildren.add(
+        Align(
+          alignment: AlignmentDirectional(0, 0),
+          child: Text(
+            '${priceGroup.StarTime.hour.toString().padLeft(2, '0')}${priceGroup.StarTime.minute.toString().padLeft(2, '0')}-${priceGroup.EndTime.hour.toString().padLeft(2, '0')}59  (\$${priceGroup.price}/Hour)',
+            textAlign: TextAlign.center,
+            style: FlutterFlowTheme.of(context).bodyMedium.override(
+                  fontFamily: 'Readex Pro',
+                  fontSize: 20,
+                ),
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -80,7 +138,7 @@ class DetailPageContent extends StatelessWidget {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(16, 0, 0, 8),
                 child: Text(
-                  'Booking Price',
+                  'Regular Parking Price',
                   style: FlutterFlowTheme.of(context).bodySmall.override(
                         fontFamily: 'Outfit',
                         color: Color(0xFF0F1113),
@@ -117,40 +175,59 @@ class DetailPageContent extends StatelessWidget {
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Align(
-                            alignment: AlignmentDirectional(0, 0),
-                            child: Text(
-                              '0000-1600  (\$10/Hour)',
-                              textAlign: TextAlign.center,
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'Readex Pro',
-                                    fontSize: 20,
-                                  ),
-                            ),
-                          ),
-                          Align(
-                            alignment: AlignmentDirectional(0, 0),
-                            child: Text(
-                              '1700-2300  (\$20/Hour)',
-                              textAlign: TextAlign.center,
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'Readex Pro',
-                                    fontSize: 20,
-                                  ),
-                            ),
-                          ),
-                        ],
+                        children: regPriceListChildren,
                       ),
                     ),
                   ),
                 ),
               ),
+                            Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(16, 0, 0, 8),
+                child: Text(
+                  'Electric Parking Price',
+                  style: FlutterFlowTheme.of(context).bodySmall.override(
+                        fontFamily: 'Outfit',
+                        color: Color(0xFF0F1113),
+                        fontSize: 22,
+                        fontWeight: FontWeight.normal,
+                      ),
+                ),
+              ),
               Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 12),
+                child: InkWell(
+                  splashColor: Colors.transparent,
+                  focusColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTap: () async {
+                    Navigator.pushNamed(context, '/locationDetail');
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFF1F4F8),
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 3,
+                          color: Color(0x33000000),
+                          offset: Offset(0, 1),
+                        )
+                      ],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Align(
+                      alignment: AlignmentDirectional(0, 0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: elecPriceListChildren,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              /*Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(16, 0, 0, 8),
                 child: Text(
                   'Plan Price',
@@ -199,7 +276,7 @@ class DetailPageContent extends StatelessWidget {
                     ),
                   ),
                 ),
-              ),
+              ),*/
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(16, 0, 0, 8),
                 child: Text(
@@ -250,6 +327,7 @@ class DetailPageContent extends StatelessWidget {
                   ),
                 ),
               ),
+              /*
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(16, 0, 0, 8),
                 child: Text(
@@ -281,7 +359,7 @@ class DetailPageContent extends StatelessWidget {
                   child: Align(
                     alignment: AlignmentDirectional(0, 0),
                     child: Text(
-                      '6/20',
+                      '6${parkingLotInfo.reservableOnlyRegularSpaces + parkingLotInfo.availableElectricSpaces}/${parkingLotInfo.reservableOnlyRegularSpaces + parkingLotInfo.reservableOnlyElectricSpaces}',
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             fontFamily: 'Readex Pro',
                             fontSize: 20,
@@ -289,7 +367,7 @@ class DetailPageContent extends StatelessWidget {
                     ),
                   ),
                 ),
-              ),
+              ),*/
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 8),
                 child: Container(
@@ -311,7 +389,8 @@ class DetailPageContent extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => BookingWidget(parkingLotInfo: parkingLotInfo)));
+                              builder: (context) => BookingWidget(
+                                  parkingLotInfo: parkingLotInfo)));
                     },
                     text: 'Booking Now',
                     options: FFButtonOptions(
