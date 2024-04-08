@@ -29,14 +29,13 @@ class ParkingSessionInfo {
         json['data'].map<ParkingRecordInfo>((json) => ParkingRecordInfo.fromJson(json as Map<String,dynamic>))
         .toList():[];
 
-
     return ParkingSessionInfo(
         sessionID: json['sessionID'],
         lotID: json['lotID'],
         lotName: json['lotName'],
         vehicleLicense: json['vehicleLicense'],
         entryTime: DateTime.parse(json['entryTime']),
-        exitTime: DateTime.parse(json['exitTime']),
+        exitTime: json['exitTime'] != null ? DateTime.parse(json['exitTime']) : null,
         totalPrice: json['totalPrice'],
         records: parkingRecordList
         );

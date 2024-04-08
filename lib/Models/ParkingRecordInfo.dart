@@ -26,8 +26,8 @@ class ParkingRecordInfo {
     return ParkingRecordInfo(
       parkingRecordID: json['parkingRecordID'],
       period: json['period'],
-      entryTime: json['entryTime'],
-      exitTime: json['exitTime'],
+      entryTime: DateTime.parse(json['entryTime']),
+      exitTime: DateTime.parse(json['exitTime']),
       //reservation: json['reservation'],
       price: json['price'],
       spaceType: json['spaceType'],

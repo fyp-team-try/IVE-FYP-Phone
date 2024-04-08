@@ -54,7 +54,6 @@ class _HistoryWidgetState extends State<HistoryWidget> {
           (json) =>
               ParkingSessionPageInfo.fromJson(json as Map<String, dynamic>),
           token);
-
       if (response.statusCode == 200) {
         setState(() {
           parkingSessionPage = response.data;
@@ -129,7 +128,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             parkingSessionPage == null
-                                ? Text("Test")
+                                ? Text("Loading")
                                 : ListView.builder(
                                     padding: EdgeInsets.fromLTRB(
                                       0,
