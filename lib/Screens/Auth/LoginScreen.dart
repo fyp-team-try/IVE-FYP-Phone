@@ -25,16 +25,19 @@ class LoginScreen extends StatelessWidget {
         duration: const Duration(seconds: 2),
       ));
 
-      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+      Navigator.pushNamedAndRemoveUntil(context, '/functions', (route) => false); 
       // Navigator.pushNamed(context, '/home');
     } catch (e) {}
   }
 
   void userRegister(BuildContext context) {
+    /*
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text('Register'),
       duration: Duration(seconds: 2),
     ));
+    */
+    Navigator.pushNamed(context, '/register');
   }
 
   @override

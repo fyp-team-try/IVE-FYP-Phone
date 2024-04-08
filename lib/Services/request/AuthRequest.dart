@@ -26,3 +26,23 @@ Future<UserInfo> LoginRequest(
   }
   throw Exception('Login request failed.');
 }
+
+Future<bool> RegisterRequest(RegisterRequestModel data, BuildContext context) async {
+  try {
+    ApiRequest api = ApiRequest();
+    ApiResponse<String> response = await api.post<String>(
+        data, 'auth/register', (json) => json.toString());
+
+    if (response.success) {
+      return true;
+    }
+    throw Exception(response.errorMessage);
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(e.toString()),
+      ),
+    );
+  }
+  return false;
+}

@@ -12,3 +12,14 @@ class LoginRequestModels implements ApiRequestModels {
     return jsonEncode({'username': username, 'password': password});
   }
 }
+
+class RegisterRequestModel implements ApiRequestModels{
+  String username;
+  String password;
+  RegisterRequestModel({required this.username, required this.password});
+
+  @override
+  String toJson() {
+    return jsonEncode({'username': username, 'password': password});
+  }
+}

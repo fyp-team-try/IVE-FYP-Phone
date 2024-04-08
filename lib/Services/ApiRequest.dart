@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:user_app/Models/Api/ApiRequestModels.dart';
 import 'package:http/http.dart' as http;
@@ -17,18 +16,42 @@ class ApiRequest {
   }
 
   Future<ApiResponse<T>> post<T>(ApiRequestModels data, String endpoint,
-      T Function(Object? json) fromJsonT) async {
+      T Function(Object? json) fromJsonT,[String? token]) async {
     try {
       Uri url = Uri.parse('$apiUrl/$endpoint');
       final response = await http.post(url,
-          headers: <String, String>{
+          headers: token==null?<String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
-          },
+          }:<String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization':'Bearer $token'
+          }
+          ,
           body: data.toJson());
       Map<String, dynamic> json = jsonDecode(response.body);
       ApiResponse<T> apiResponse = ApiResponse.fromJson(json, fromJsonT);
       return apiResponse;
     } catch (e) {}
     throw Exception('Failed to load data');
+  }
+
+    Future<ApiResponse<T>> get<T>(String endpoint,
+      T Function(Object? json) fromJsonT,[String? token]) async {
+    try {
+      Uri url = Uri.parse('$apiUrl/$endpoint');
+      final response = await http.get(url,
+          headers: token==null?<String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          }:<String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization':'Bearer $token'
+          });
+      Map<String, dynamic> json = jsonDecode(response.body);
+      ApiResponse<T> apiResponse = ApiResponse.fromJson(json, fromJsonT);
+      return apiResponse;
+    } catch (e) {
+      print(e.toString());
+    }
+    throw Exception('Failed to get data');
   }
 }
