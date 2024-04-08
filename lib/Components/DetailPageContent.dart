@@ -239,7 +239,7 @@ class DetailPageContent extends StatelessWidget {
                     child: Align(
                       alignment: AlignmentDirectional(0, 0),
                       child: Text(
-                        '${parkingLotInfo.regularSpaces + parkingLotInfo.electricSpaces}/${parkingLotInfo.availableRegularSpaces + parkingLotInfo.availableElectricSpaces}',
+                        '${parkingLotInfo.availableRegularSpaces + parkingLotInfo.availableElectricSpaces}/${parkingLotInfo.regularSpaces + parkingLotInfo.electricSpaces}',
                         textAlign: TextAlign.center,
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               fontFamily: 'Readex Pro',
