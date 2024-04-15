@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:user_app/Models/VehicleInfo.dart';
@@ -55,7 +57,7 @@ class ManageVehicleItem extends StatelessWidget {
                       ),
                     ),
                     Text(
-                        vehicleInfo.vehicleType == 0?"Regular":"Eletric",
+                      vehicleInfo.vehicleType == 0 ? "Regular" : "Eletric",
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             fontFamily: 'Readex Pro',
                             fontSize: 15,
@@ -70,12 +72,12 @@ class ManageVehicleItem extends StatelessWidget {
                 borderWidth: 1,
                 buttonSize: 35,
                 icon: Icon(
+                  //No one can see this right?
                   Icons.delete_outline_rounded,
-                  color: Color(0xFFE86969),
+                  color: Color.fromARGB(255, 252, 252, 252),
                   size: 20,
                 ),
                 onPressed: () {
-                  print('IconButton pressed ...');
                 },
               ),
             ],
@@ -85,4 +87,3 @@ class ManageVehicleItem extends StatelessWidget {
     );
   }
 }
-

@@ -181,7 +181,7 @@ class DetailPageContent extends StatelessWidget {
                   ),
                 ),
               ),
-                            Padding(
+              Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(16, 0, 0, 8),
                 child: Text(
                   'Electric Parking Price',
@@ -429,6 +429,7 @@ class DetailPageContent extends StatelessWidget {
                     ],
                     borderRadius: BorderRadius.circular(8),
                   ),
+                  /*
                   child: FFButtonWidget(
                     onPressed: () async {
                       Navigator.pushNamed(context, '/plan');
@@ -451,7 +452,7 @@ class DetailPageContent extends StatelessWidget {
                       ),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                  ),
+                  ),*/
                 ),
               ),
             ],

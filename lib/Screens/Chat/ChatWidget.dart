@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
+import 'package:user_app/Models/RecieveMessageModel.dart';
 import 'package:user_app/Providers/AuthProvider.dart';
 
 import 'package:uuid/uuid.dart';
@@ -21,7 +24,7 @@ class _ChatPageState extends State<ChatPage> {
   String message = '';
 
   final _user = const types.User(
-    id: 'User',
+    id: 'CUSTOMER',
   );
 
   @override
@@ -31,29 +34,31 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void ConnectWebSocket() async {
-    //'wss://fyp.alexchoicy.live/api/v1/chats/59e8febf-2e2e-484e-a61b-30117b2b8419'
     try {
       String token = context.read<AuthProvider>().getUserInfo().token;
       ws = IOWebSocketChannel.connect(
           Uri.parse(
               '${dotenv.env['WS_BASEURL']!}/${dotenv.env['API_VERSION']}/chats/${dotenv.env['TEST_CHATID']}'),
           headers: {
-            'Authorization':
-                'Bearer ${dotenv.env['TEST_TOKEN']}',
+            'Authorization': 'Bearer ${dotenv.env['TEST_TOKEN']}',
           });
+
       ws.stream.listen(
         (message) {
-          final textMessage = types.TextMessage(
-            author: types.User(id: "Admin"),
-            createdAt: DateTime.now().millisecondsSinceEpoch,
-            id: const Uuid().v4(),
-            text: message,
-          );
-          _addMessage(textMessage);
-          print("Websocket recieve: $message");
+          RecieveMessageModel reMessage = RecieveMessageModel.fromJson(
+              jsonDecode(message) as Map<String, dynamic>);
+
+          if (reMessage.chatSender != "SYSTEM") {
+            final textMessage = types.TextMessage(
+              author: types.User(id: reMessage.chatSender),
+              createdAt: DateTime.now().millisecondsSinceEpoch,
+              id: const Uuid().v4(),
+              text: reMessage.Message,
+            );
+            _addMessage(textMessage);
+          }
         },
         onError: (error) async {
-          print("Web socket error");
           await showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -72,16 +77,17 @@ class _ChatPageState extends State<ChatPage> {
             },
           );
         },
-         onDone: () async {
+        onDone: () async {
           await showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
                 title: Text('Error'),
-                content: Text("Web socket disconnected"),
+                content: Text("Connection error"),
                 actions: [
                   TextButton(
                     onPressed: () {
+                      Navigator.pop(context);
                       Navigator.pop(context);
                     },
                     child: Text('OK'),

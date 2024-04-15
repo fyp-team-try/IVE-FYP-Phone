@@ -75,7 +75,7 @@ class ParkingRecordItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      "\$${parkingSessionInfo.totalPrice??0.0}",
+                      "\$${parkingSessionInfo.totalPrice??"0.0"}",
                       textAlign: TextAlign.end,
                       style: FlutterFlowTheme.of(context).titleLarge,
                     ),
