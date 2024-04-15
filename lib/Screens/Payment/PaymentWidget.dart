@@ -85,15 +85,11 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                             child: Container(
                                 width: double.infinity,
                                 height: 190,
-                                child: Center(
-                                  child: Text(
-                                    'Register payment method first',
-                                    textAlign: TextAlign.center,
-                                  ),
-                                )
-                                /*CarouselSlider(
+                                child: 
+                                CarouselSlider(
                                 items: [
-                                  Text("Register payment method first",textAlign: ,)
+                                  CreditCardDisplay(),
+                                  CreditCardDisplay()
                                 ],
                                 carouselController:
                                     _model.carouselController ??=
@@ -110,8 +106,8 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                   onPageChanged: (index, _) =>
                                       _model.carouselCurrentIndex = index,
                                 ),
-                              ),*/
-                                ),
+                              ),
+                            ),
                           ),
                         ],
                       ),

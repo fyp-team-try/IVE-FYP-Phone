@@ -83,7 +83,7 @@ class LocationListItem extends StatelessWidget {
                             ),
                             Expanded(
                               child: Text(
-                                '${parkingLotInfo.regularSpaces+parkingLotInfo.electricSpaces}/${parkingLotInfo.availableRegularSpaces+parkingLotInfo.availableElectricSpaces}',
+                                '${parkingLotInfo.availableRegularSpaces+parkingLotInfo.availableElectricSpaces}/${parkingLotInfo.regularSpaces+parkingLotInfo.electricSpaces}',
                                 style: FlutterFlowTheme.of(context)
                                     .labelSmall
                                     .override(

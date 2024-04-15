@@ -153,7 +153,7 @@ class _BookingWidgetState extends State<BookingWidget> {
             builder: (BuildContext context) {
               return AlertDialog(
                 title: Text('Reservation Successful'),
-                content: Text('You have reserveed a spot.'),
+                content: Text('You have reserved a spot.'),
                 actions: [
                   TextButton(
                     onPressed: () {
@@ -587,7 +587,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                                                   },
                                                   text: _model.pickerDateValue1 !=
                                                           null
-                                                      ? '${_model.pickerDateValue1?.day}/${_model.pickerDateValue1?.month}/${_model.pickerDateValue1?.year} ${_model.pickerTimeValue1?.hour}:${_model.pickerTimeValue1?.minute}'
+                                                      ? '${_model.pickerDateValue1?.day}/${_model.pickerDateValue1?.month}/${_model.pickerDateValue1?.year} ${_model.pickerTimeValue1?.hour.toString().padLeft(2, '0')}:${_model.pickerTimeValue1?.minute.toString().padLeft(2, '0')}'
                                                       : 'Select Start Time',
                                                   options: FFButtonOptions(
                                                     height: 40,
@@ -698,7 +698,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                                                 },
                                                 text: _model.pickerDateValue2 !=
                                                         null
-                                                    ? '${_model.pickerDateValue2?.day}/${_model.pickerDateValue2?.month}/${_model.pickerDateValue2?.year} ${_model.pickerTimeValue2?.hour}:${_model.pickerTimeValue2?.minute}'
+                                                    ? '${_model.pickerDateValue2?.day}/${_model.pickerDateValue2?.month}/${_model.pickerDateValue2?.year} ${_model.pickerTimeValue2?.hour.toString().padLeft(2, '0')}:${_model.pickerTimeValue2?.minute.toString().padLeft(2, '0')}'
                                                     : 'Select Start Time',
                                                 options: FFButtonOptions(
                                                   height: 40,
@@ -741,7 +741,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                             ),
                           ),
                         ),
-                        Align(
+                        /*Align(
                           alignment: AlignmentDirectional(0, 0),
                           child: Padding(
                             padding:
@@ -761,7 +761,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                                   Align(
                                     alignment: AlignmentDirectional(0, 0),
                                     child: Text(
-                                      'Charge :',
+                                      'Est. Charge:',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
@@ -783,7 +783,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                               ),
                             ),
                           ),
-                        ),
+                        ),*/
                         Align(
                           alignment: AlignmentDirectional(0, 0),
                           child: Padding(
@@ -847,7 +847,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                                   Align(
                                     alignment: AlignmentDirectional(0, 0),
                                     child: Text(
-                                      'Total :',
+                                      'Est. Total :',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
