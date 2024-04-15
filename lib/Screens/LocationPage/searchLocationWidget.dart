@@ -77,6 +77,10 @@ class _SearchLocationWidgetState extends State<SearchLocationWidget> {
       setState(() {
         displayItems=items?.where((parkingLot) => parkingLot.name.toLowerCase().contains(searchBarText.toLowerCase())).toList();
       });
+    }else if(searchBarText!=""&&chipsValue!=null){
+        displayItems=items?.where((parkingLot) => parkingLot.name.toLowerCase().contains(searchBarText.toLowerCase())&&parkingLot.district == chipsValue).toList();    
+    }else if(searchBarText=="" && chipsValue!=null){
+      displayItems=items?.where((parkingLot) => parkingLot.district == chipsValue).toList();
     }else{
       setState(() {
         displayItems = items;
