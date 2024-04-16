@@ -73,6 +73,7 @@ class MyApp extends StatelessWidget {
         '/payment':(context)=>PaymentWidget(),
         '/history':(context)=>HistoryWidget(),
         '/BookingHistory':(context)=>BookingHistoryWidget(),
+        '/BookingModify':(context)=>HistoryModifybookingWidget(),
         '/Setting':(context)=>SettingWidget(),
         '/PaymentOption':(context)=>PaymentOptionsWidget(),
         '/EditPassword':(context)=>EditPasswordWidget(),

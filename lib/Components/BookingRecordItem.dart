@@ -20,7 +20,11 @@ class BookingRecordItem extends StatelessWidget {
     String enterTimeString = "${bookingRecordInfo.startTime.hour.toString().padLeft(2, '0')}:${bookingRecordInfo.startTime.minute.toString().padLeft(2, '0')}";
     String exitTimeString = "${bookingRecordInfo.endTime.hour.toString().padLeft(2, '0')}:${bookingRecordInfo.endTime.minute.toString().padLeft(2, '0')}";
 
-    return Padding(
+    return InkWell(
+      onTap: (){
+        Navigator.pushNamed(context, "/BookingModify",arguments:bookingRecordInfo);
+      },
+      child:Padding(
       padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
       child: Container(
         width: MediaQuery.sizeOf(context).width * 0.92,
@@ -94,6 +98,6 @@ class BookingRecordItem extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ));
   }
 }

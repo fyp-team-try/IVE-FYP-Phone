@@ -14,8 +14,11 @@ class HistoryModifybookingModel
   // State field(s) for DropDown widget.
   String? dropDownValue2;
   FormFieldController<String>? dropDownValueController2;
+  
   DateTime? datePicked1;
+  TimeOfDay? pickerTimeValue1;
   DateTime? datePicked2;
+  TimeOfDay? pickerTimeValue2;
   // State field(s) for DropDown widget.
   String? dropDownValue3;
   FormFieldController<String>? dropDownValueController3;

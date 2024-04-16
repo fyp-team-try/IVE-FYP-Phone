@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 class BookingRecordInfo {
+  int reservationID;
   String lotName;
   String spaceType;
   DateTime startTime;
@@ -10,7 +11,8 @@ class BookingRecordInfo {
   String vehicleLicense;
 
   BookingRecordInfo(
-      {required this.lotName,
+      {required this.reservationID,
+      required this.lotName,
       required this.spaceType,
       required this.startTime,
       required this.endTime,
@@ -19,6 +21,7 @@ class BookingRecordInfo {
 
   factory BookingRecordInfo.fromJson(Map<String, dynamic> json) {
     return BookingRecordInfo(
+      reservationID:json['reservationID'],
       lotName: json['lotName'],
       spaceType: json['spaceType'],
       startTime: DateTime.parse(json['startTime']),
