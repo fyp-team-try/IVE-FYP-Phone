@@ -23,7 +23,7 @@ class ParkingRecordItem extends StatelessWidget {
       padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
       child: Container(
         width: MediaQuery.sizeOf(context).width * 0.92,
-        height: 70,
+        height: 140,
         decoration: BoxDecoration(
           color: FlutterFlowTheme.of(context).secondaryBackground,
           boxShadow: [
@@ -52,14 +52,32 @@ class ParkingRecordItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                                            Text(
+                        "SessionID:${parkingSessionInfo.sessionID}",
+                        style: FlutterFlowTheme.of(context).bodyLarge,
+                      ),
                       Text(
-                        parkingSessionInfo.lotName,
+                        "${parkingSessionInfo.lotName}",
                         style: FlutterFlowTheme.of(context).bodyLarge,
                       ),
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
                         child: Text(
-                          parkingSessionInfo.exitTime!=null?'$enterDateString to $exitDateString':'Not exit yet',
+                          "License Plate: ${parkingSessionInfo!.vehicleLicense}",
+                          style: FlutterFlowTheme.of(context).labelSmall,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                        child: Text(
+                          "Enter Time: ${'$enterDateString $enterTimeString'}",
+                          style: FlutterFlowTheme.of(context).labelSmall,
+                        ),
+                      ),
+                                            Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                        child: Text(
+                          parkingSessionInfo.exitTime!=null?"Exit Time: ${'$exitDateString $exitTimeString'}":'Not exit yet',
                           style: FlutterFlowTheme.of(context).labelSmall,
                         ),
                       ),
@@ -81,7 +99,7 @@ class ParkingRecordItem extends StatelessWidget {
                     ),
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
-                      child: Text(parkingSessionInfo.exitTime!=null?'${enterTimeString} to $exitTimeString':'',
+                      child: Text("",
                         textAlign: TextAlign.end,
                         style: FlutterFlowTheme.of(context).labelSmall,
                       ),

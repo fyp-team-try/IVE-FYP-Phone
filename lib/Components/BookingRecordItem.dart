@@ -28,7 +28,7 @@ class BookingRecordItem extends StatelessWidget {
       padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
       child: Container(
         width: MediaQuery.sizeOf(context).width * 0.92,
-        height: 70,
+        height: 120,
         decoration: BoxDecoration(
           color: FlutterFlowTheme.of(context).secondaryBackground,
           boxShadow: [
@@ -58,13 +58,34 @@ class BookingRecordItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "${bookingRecordInfo.lotName}{${bookingRecordInfo.spaceType}}",
+                        "${bookingRecordInfo.lotName}",
                         style: FlutterFlowTheme.of(context).bodyLarge,
                       ),
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
                         child: Text(
-                          '$enterDateString to $exitDateString',
+                          'Vehicle license:${bookingRecordInfo.vehicleLicense}',
+                          style: FlutterFlowTheme.of(context).labelSmall,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                        child: Text(
+                          'Lot type:${bookingRecordInfo.spaceType}',
+                          style: FlutterFlowTheme.of(context).labelSmall,
+                        ),
+                      ),
+                                            Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                        child: Text(
+                          'Start time: $enterDateString $enterTimeString 00',
+                          style: FlutterFlowTheme.of(context).labelSmall,
+                        ),
+                      ),
+                                            Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                        child: Text(
+                          'End time:  $exitDateString $exitTimeString 00',
                           style: FlutterFlowTheme.of(context).labelSmall,
                         ),
                       ),
@@ -80,13 +101,13 @@ class BookingRecordItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      "${bookingRecordInfo.vehicleLicense}",
+                      "ID:${bookingRecordInfo.reservationID}",
                       textAlign: TextAlign.end,
                       style: FlutterFlowTheme.of(context).titleLarge,
                     ),
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
-                      child: Text('${enterTimeString} to $exitTimeString',
+                      child: Text("",
                         textAlign: TextAlign.end,
                         style: FlutterFlowTheme.of(context).labelSmall,
                       ),
