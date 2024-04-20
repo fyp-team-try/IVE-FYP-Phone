@@ -3,33 +3,35 @@ import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:user_app/Components/BookingRecordItem.dart';
+import 'package:user_app/Components/PaymentRecordItem.dart';
 import 'package:user_app/Models/Api/ApiResponse.dart';
 import 'package:user_app/Models/MyInfo.dart';
+import 'package:user_app/Models/PaymentObjectModel.dart';
 import 'package:user_app/Models/ReservationRecorrdInfo.dart';
 import 'package:user_app/Providers/AuthProvider.dart';
 import 'package:user_app/Services/ApiRequest.dart';
 
-import 'BookingHistoryModel.dart';
-export 'BookingHistoryModel.dart';
+import 'PaymentListModel.dart';
+export 'PaymentListModel.dart';
 
-class BookingHistoryWidget extends StatefulWidget {
-  const BookingHistoryWidget({super.key});
+class PaymentListWidget extends StatefulWidget {
+  const PaymentListWidget({super.key});
 
   @override
-  State<BookingHistoryWidget> createState() => _HistoryWidgetState();
+  State<PaymentListWidget> createState() => _HistoryWidgetState();
 }
 
-class _HistoryWidgetState extends State<BookingHistoryWidget> {
-  late BookingHistoryModel _model;
+class _HistoryWidgetState extends State<PaymentListWidget> {
+  late PaymentListModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  List<BookingRecordInfo>? bookingList;
+  List<BookingRecordInfo>? totalPaymentList;
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => BookingHistoryModel());
+    _model = createModel(context, () => PaymentListModel());
     GetParkingRecords();
   }
 
@@ -50,13 +52,16 @@ class _HistoryWidgetState extends State<BookingHistoryWidget> {
 
       ApiResponse<List<BookingRecordInfo>> response = await api.get(
           'reservations',
-          (json) => (json as List<dynamic>).map<BookingRecordInfo>((dynamic item) {
+          (json) =>
+              (json as List<dynamic>).map<BookingRecordInfo>((dynamic item) {
                 return BookingRecordInfo.fromJson(item);
-              }).toList(),token);
+              }).toList(),
+          token);
       if (response.statusCode == 200) {
         setState(() {
-          bookingList = response.data;
+          totalPaymentList = response.data;      
         });
+        print(totalPaymentList);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Data Fetch failed'),
@@ -109,7 +114,7 @@ class _HistoryWidgetState extends State<BookingHistoryWidget> {
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(24, 20, 0, 0),
                         child: Text(
-                          'Booking Record',
+                          'Payment Record',
                           textAlign: TextAlign.start,
                           style: FlutterFlowTheme.of(context)
                               .headlineMedium
@@ -126,7 +131,7 @@ class _HistoryWidgetState extends State<BookingHistoryWidget> {
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
-                            bookingList == null
+                            totalPaymentList == null
                                 ? Text("Loading")
                                 : ListView.builder(
                                     padding: EdgeInsets.fromLTRB(
@@ -137,11 +142,11 @@ class _HistoryWidgetState extends State<BookingHistoryWidget> {
                                     ),
                                     shrinkWrap: true,
                                     scrollDirection: Axis.vertical,
-                                    itemCount: bookingList?.length,
+                                    itemCount: totalPaymentList?.length,
                                     itemBuilder: (context, index) {
                                       BookingRecordInfo currItem =
-                                          bookingList![index];
-                                      return BookingRecordItem(
+                                          totalPaymentList![index];
+                                      return PaymentRecordItem(
                                           bookingRecordInfo: currItem);
                                     }),
                           ],

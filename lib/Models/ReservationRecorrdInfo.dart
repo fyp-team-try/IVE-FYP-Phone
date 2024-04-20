@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
+import 'package:user_app/Models/PaymentObjectModel.dart';
 
 class BookingRecordInfo {
   int reservationID;
@@ -9,6 +9,7 @@ class BookingRecordInfo {
   DateTime startTime;
   DateTime endTime;
   String vehicleLicense;
+  PaymentObjectModel payment;
 
   BookingRecordInfo(
       {required this.reservationID,
@@ -17,6 +18,7 @@ class BookingRecordInfo {
       required this.startTime,
       required this.endTime,
       required this.vehicleLicense,
+      required this.payment
   });
 
   factory BookingRecordInfo.fromJson(Map<String, dynamic> json) {
@@ -26,7 +28,8 @@ class BookingRecordInfo {
       spaceType: json['spaceType'],
       startTime: DateTime.parse(json['startTime']),
       endTime: DateTime.parse(json['endTime']),
-      vehicleLicense: json['vehicleLicense']
+      vehicleLicense: json['vehicleLicense'],
+      payment: PaymentObjectModel.fromJson(json['payment'])
     );
   }
 

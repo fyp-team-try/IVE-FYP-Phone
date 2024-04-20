@@ -3,7 +3,12 @@ import 'package:flutterflow_ui/flutterflow_ui.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:user_app/Components/CreditCardDisplay.dart';
+import 'package:user_app/Models/Api/RequestModels/reservationPaymentModel.dart';
+import 'package:user_app/Models/ReservationRecorrdInfo.dart';
+import 'package:user_app/Providers/AuthProvider.dart';
+import 'package:user_app/Services/request/ReservationPaymentRequest.dart';
 
 import 'PaymentModel.dart';
 export 'PaymentModel.dart';
@@ -18,6 +23,8 @@ class PaymentWidget extends StatefulWidget {
 class _PaymentWidgetState extends State<PaymentWidget> {
   late PaymentModel _model;
 
+
+  BookingRecordInfo? bookingRecordInfo;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -33,8 +40,39 @@ class _PaymentWidgetState extends State<PaymentWidget> {
     super.dispose();
   }
 
+    void pay() async{
+try {
+    String token = context.read<AuthProvider>().getUserInfo().token;
+        reservationPaymentModel ReservationPaymentModel = reservationPaymentModel(paymentMethod: "App", paymentMethodType: "CreditCard");
+
+        bool isRegSuccess = await reservationPaymentRequest(ReservationPaymentModel, context, bookingRecordInfo!.reservationID, token);
+
+        if (isRegSuccess) {
+          await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Pay Successful'),
+                content: Text('You have finish paymenet for this reservation.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      } catch (e) {}
+  }
+
+
   @override
   Widget build(BuildContext context) {
+     bookingRecordInfo = ModalRoute.of(context)!.settings.arguments as BookingRecordInfo;
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -52,7 +90,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Plan Payment',
+                  'Payment',
                   style: FlutterFlowTheme.of(context).headlineLarge,
                 ),
               ],
@@ -179,7 +217,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                           ),
                                     ),
                                     Text(
-                                      '\$156.00',
+                                      '${bookingRecordInfo!.lotName}',
                                       textAlign: TextAlign.end,
                                       style: FlutterFlowTheme.of(context)
                                           .bodyLarge,
@@ -208,7 +246,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                           ),
                                     ),
                                     Text(
-                                      '\$24.20',
+                                      '${bookingRecordInfo!.vehicleLicense}',
                                       textAlign: TextAlign.end,
                                       style: FlutterFlowTheme.of(context)
                                           .bodyLarge,
@@ -237,7 +275,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                           ),
                                     ),
                                     Text(
-                                      '\$40.00',
+                                      '${bookingRecordInfo!.startTime.day.toString().padLeft(2, '0')}-${bookingRecordInfo!.startTime.month.toString().padLeft(2, '0')}-${bookingRecordInfo!.startTime.year.toString().padLeft(2, '0')} ${bookingRecordInfo!.startTime.hour.toString().padLeft(2, '0')}:${bookingRecordInfo!.startTime.minute.toString().padLeft(2, '0')}',
                                       textAlign: TextAlign.end,
                                       style: FlutterFlowTheme.of(context)
                                           .bodyLarge,
@@ -266,7 +304,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                           ),
                                     ),
                                     Text(
-                                      '\$24.20',
+                                      '${bookingRecordInfo!.endTime.day.toString().padLeft(2, '0')}-${bookingRecordInfo!.endTime.month.toString().padLeft(2, '0')}-${bookingRecordInfo!.endTime.year.toString().padLeft(2, '0')} ${bookingRecordInfo!.endTime.hour.toString().padLeft(2, '0')}:${bookingRecordInfo!.endTime.minute.toString().padLeft(2, '0')}',
                                       textAlign: TextAlign.end,
                                       style: FlutterFlowTheme.of(context)
                                           .bodyLarge,
@@ -295,7 +333,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                           ),
                                     ),
                                     Text(
-                                      '\$24.20',
+                                      '${bookingRecordInfo!.spaceType}',
                                       textAlign: TextAlign.end,
                                       style: FlutterFlowTheme.of(context)
                                           .bodyLarge,
@@ -330,7 +368,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                       ],
                                     ),
                                     Text(
-                                      '\$230.20',
+                                      '\$${bookingRecordInfo!.payment.amount}',
                                       style: FlutterFlowTheme.of(context)
                                           .displaySmall,
                                     ),
@@ -342,7 +380,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                         ),
                         FFButtonWidget(
                           onPressed: () async {
-                            //context.pushNamed('plansuccess');
+                            pay();
                           },
                           text: 'Pay',
                           options: FFButtonOptions(

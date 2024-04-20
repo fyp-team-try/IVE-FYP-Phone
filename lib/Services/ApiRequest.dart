@@ -20,6 +20,7 @@ class ApiRequest {
       T Function(Object? json) fromJsonT,[String? token]) async {
     try {
       Uri url = Uri.parse('$apiUrl/$endpoint');
+      
       final response = await http.post(url,
           headers: token==null?<String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
@@ -48,6 +49,7 @@ class ApiRequest {
             'Authorization':'Bearer $token'
           });
       Map<String, dynamic> json = jsonDecode(response.body);
+      print(json);
       ApiResponse<T> apiResponse = ApiResponse.fromJson(json, fromJsonT);
       return apiResponse;
     } catch (e) {

@@ -11,6 +11,7 @@ import 'package:user_app/Screens/History/HistoryWidget.dart';
 import 'package:user_app/Screens/History/BookingHistoryModWidget.dart';
 import 'package:user_app/Screens/LocationPage/LocationDetailWidget.dart';
 import 'package:user_app/Screens/LocationPage/searchLocationWidget.dart';
+import 'package:user_app/Screens/Payment/PaymentListWidget.dart';
 import 'package:user_app/Screens/Payment/paymentwidget.dart';
 import 'package:user_app/Screens/Plan/planwidget.dart';
 import 'package:user_app/Screens/Setting/AddCreditCardWidget.dart';
@@ -70,6 +71,7 @@ class MyApp extends StatelessWidget {
         '/location': (context) => SearchLocationWidget(),
         '/locationDetail': (context) => LocationDetailWidget(),
         '/plan': (context) => PlanWidget(),
+        '/paymentList':(context)=>PaymentListWidget(),
         '/payment':(context)=>PaymentWidget(),
         '/history':(context)=>HistoryWidget(),
         '/BookingHistory':(context)=>BookingHistoryWidget(),

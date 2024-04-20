@@ -20,10 +20,11 @@ class LoginScreen extends StatelessWidget {
 
       context.read<AuthProvider>().setUserInfo(info);
 
+      /*
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(info.token),
         duration: const Duration(seconds: 2),
-      ));
+      ));*/
 
       Navigator.pushNamedAndRemoveUntil(context, '/functions', (route) => false); 
       // Navigator.pushNamed(context, '/home');

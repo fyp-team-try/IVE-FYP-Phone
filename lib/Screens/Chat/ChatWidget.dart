@@ -33,6 +33,11 @@ class _ChatPageState extends State<ChatPage> {
     ConnectWebSocket();
   }
 
+  @override
+  void dispose(){
+    
+  }
+
   void ConnectWebSocket() async {
     try {
       String token = context.read<AuthProvider>().getUserInfo().token;

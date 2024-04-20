@@ -42,8 +42,8 @@ class LocationListItem extends StatelessWidget {
                   padding: EdgeInsets.all(2),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: Image.asset(
-                      'assets/images/black.png',
+                    child: Image.network(
+                      'https://picsum.photos/seed/287/600',
                       width: 120,
                       height: 120,
                       fit: BoxFit.cover,

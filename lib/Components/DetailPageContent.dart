@@ -93,8 +93,8 @@ class DetailPageContent extends StatelessWidget {
                 padding: EdgeInsets.all(12),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(
-                    'assets/images/black.png',
+                  child: Image.network(
+                    'https://picsum.photos/seed/580/600',
                     width: double.infinity,
                     height: 230,
                     fit: BoxFit.cover,
