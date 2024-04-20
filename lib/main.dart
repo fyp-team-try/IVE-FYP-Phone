@@ -11,6 +11,7 @@ import 'package:user_app/Screens/History/HistoryWidget.dart';
 import 'package:user_app/Screens/History/BookingHistoryModWidget.dart';
 import 'package:user_app/Screens/LocationPage/LocationDetailWidget.dart';
 import 'package:user_app/Screens/LocationPage/searchLocationWidget.dart';
+import 'package:user_app/Screens/Payment/ParkingPaymentWidget.dart';
 import 'package:user_app/Screens/Payment/PaymentListWidget.dart';
 import 'package:user_app/Screens/Payment/paymentwidget.dart';
 import 'package:user_app/Screens/Plan/planwidget.dart';
@@ -73,6 +74,7 @@ class MyApp extends StatelessWidget {
         '/plan': (context) => PlanWidget(),
         '/paymentList':(context)=>PaymentListWidget(),
         '/payment':(context)=>PaymentWidget(),
+        '/parkingPayment':(context)=>ParkingPaymentWidget(),
         '/history':(context)=>HistoryWidget(),
         '/BookingHistory':(context)=>BookingHistoryWidget(),
         '/BookingModify':(context)=>HistoryModifybookingWidget(),

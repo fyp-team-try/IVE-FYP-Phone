@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:user_app/Models/Api/RequestModels/EditReservationRequestModel.dart';
 import 'package:user_app/Models/ReservationRecorrdInfo.dart';
 import 'package:user_app/Providers/AuthProvider.dart';
+import 'package:user_app/Services/request/CancelReservationRequest.dart';
 import 'package:user_app/Services/request/EditReservationRequest.dart';
 import 'BookingHistoryModModel.dart';
 export 'BookingHistoryModModel.dart';
@@ -48,13 +49,6 @@ class _HistoryModifybookingWidgetState
     TimeOfDay? endTime = _model.pickerTimeValue2??TimeOfDay(hour: eTime.hour, minute: eTime.minute);
     String? spaceType = _model.dropDownValue3??reservationObject!.spaceType;
 
-    print("reservationID:${reservationID}");
-    print("startDate:${startDate}");
-    print("startTime:${startTime}");
-    print("endDate:${endDate}");
-    print("endTime:${endTime}");
-    print("space:${spaceType}");
-
     String token = context.read<AuthProvider>().getUserInfo().token;
 
 
@@ -77,6 +71,57 @@ class _HistoryModifybookingWidgetState
               return AlertDialog(
                 title: Text('Edit Successful'),
                 content: Text('You have Edit the reservation.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+          Navigator.pop(context);
+        }
+      } catch (e) {
+
+      }
+  }
+
+    void cancelReservation() async {
+    int reservationID = reservationObject!.reservationID;
+    DateTime sTime = reservationObject!.startTime;
+    DateTime eTime = reservationObject!.endTime;
+
+    DateTime? startDate = _model.datePicked1??DateTime(sTime.year,sTime.month,sTime.day);
+    TimeOfDay? startTime = _model.pickerTimeValue1??TimeOfDay(hour: sTime.hour, minute: sTime.minute);
+    DateTime? endDate = _model.datePicked2??DateTime(eTime.year,eTime.month,eTime.day);
+    TimeOfDay? endTime = _model.pickerTimeValue2??TimeOfDay(hour: eTime.hour, minute: eTime.minute);
+    String? spaceType = _model.dropDownValue3??reservationObject!.spaceType;
+
+    String token = context.read<AuthProvider>().getUserInfo().token;
+
+
+      try {
+        EditReservationRequestModel editReservationRequestModel =
+            EditReservationRequestModel(
+                reservationID: reservationObject!.reservationID,
+                startTime: DateTime(startDate.year,startDate.month,startDate.day,startTime.hour,startTime.minute).toIso8601String(), 
+                endTime: DateTime(endDate.year,endDate.month,endDate.day,endTime.hour,endTime.minute).toIso8601String(), 
+                spaceType: spaceType
+            );
+
+            
+        bool isRegSuccess = await CancelReservationRequest(editReservationRequestModel, context, token);
+
+        if (isRegSuccess) {
+          await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Cancel Successful'),
+                content: Text('You have cancel the reservation.'),
                 actions: [
                   TextButton(
                     onPressed: () {
@@ -381,7 +426,9 @@ class _HistoryModifybookingWidgetState
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0, 50, 0, 0),
                 child: FFButtonWidget(
-                  onPressed: () async {},
+                  onPressed: () async {
+                    cancelReservation();
+                  },
                   text: 'Cancel reservation ',
                   options: FFButtonOptions(
                     height: 40,

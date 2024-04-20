@@ -1,19 +1,20 @@
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 
 import 'package:flutter/material.dart';
-import 'package:user_app/Models/ReservationRecorrdInfo.dart';
+import 'package:user_app/Models/ParkingRecordInfo.dart';
+import 'package:user_app/Models/ParkingSessionInfo.dart';
 
-class PaymentRecordItem extends StatelessWidget {
-  final BookingRecordInfo bookingRecordInfo;
+class ParkingPaymentItem extends StatelessWidget {
+  final ParkingSessionInfo parkingSessionInfo;
 
-  const PaymentRecordItem({required this.bookingRecordInfo});
+  const ParkingPaymentItem({required this.parkingSessionInfo});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
         onTap: () {
-          Navigator.pushNamed(context, "/payment",
-              arguments: bookingRecordInfo);
+          Navigator.pushNamed(context, "/parkingPayment",
+              arguments: parkingSessionInfo);
         },
         child: Padding(
           padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
@@ -49,20 +50,20 @@ class PaymentRecordItem extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Payment ID：${bookingRecordInfo.payment.paymentID}",
+                            "Session ID：${parkingSessionInfo.sessionID}",
                             style: FlutterFlowTheme.of(context).bodyLarge,
                           ),
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
                             child: Text(
-                              'Type:${bookingRecordInfo.payment.paymentType}',
+                              'Type: Parking fee',
                               style: FlutterFlowTheme.of(context).labelSmall,
                             ),
                           ),
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
                             child: Text(
-                              'Amount: \$${bookingRecordInfo.payment.amount}',
+                              'Amount: \$${parkingSessionInfo.totalPrice}',
                               style: FlutterFlowTheme.of(context).labelSmall,
                             ),
                           ),

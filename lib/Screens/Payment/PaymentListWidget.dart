@@ -3,9 +3,12 @@ import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:user_app/Components/BookingRecordItem.dart';
+import 'package:user_app/Components/ParkingPaymentItem.dart';
 import 'package:user_app/Components/PaymentRecordItem.dart';
 import 'package:user_app/Models/Api/ApiResponse.dart';
 import 'package:user_app/Models/MyInfo.dart';
+import 'package:user_app/Models/ParkingSessionInfo.dart';
+import 'package:user_app/Models/ParkingSessionPageInfo.dart';
 import 'package:user_app/Models/PaymentObjectModel.dart';
 import 'package:user_app/Models/ReservationRecorrdInfo.dart';
 import 'package:user_app/Providers/AuthProvider.dart';
@@ -27,11 +30,13 @@ class _HistoryWidgetState extends State<PaymentListWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   List<BookingRecordInfo>? totalPaymentList;
+  ParkingSessionPageInfo? parkingSessionPage;
 
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => PaymentListModel());
+    GetBookingRecords();
     GetParkingRecords();
   }
 
@@ -42,7 +47,7 @@ class _HistoryWidgetState extends State<PaymentListWidget> {
     super.dispose();
   }
 
-  void GetParkingRecords() async {
+  void GetBookingRecords() async {
     try {
       ApiRequest api = ApiRequest();
 
@@ -59,9 +64,37 @@ class _HistoryWidgetState extends State<PaymentListWidget> {
           token);
       if (response.statusCode == 200) {
         setState(() {
-          totalPaymentList = response.data;      
+          totalPaymentList = response.data;
         });
         print(totalPaymentList);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Data Fetch failed'),
+          duration: Duration(seconds: 5),
+        ));
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  void GetParkingRecords() async {
+    try {
+      ApiRequest api = ApiRequest();
+
+      String token = context.read<AuthProvider>().getUserInfo().token;
+      ApiResponse<MyInfo> idResponse = await api.get(
+          'me', (json) => MyInfo.fromJson(json as Map<String, dynamic>), token);
+
+      ApiResponse<ParkingSessionPageInfo> response = await api.get(
+          'users/${idResponse.data?.userID}/parkingrecords',
+          (json) =>
+              ParkingSessionPageInfo.fromJson(json as Map<String, dynamic>),
+          token);
+      if (response.statusCode == 200) {
+        setState(() {
+          parkingSessionPage = response.data;
+        });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Data Fetch failed'),
@@ -114,7 +147,7 @@ class _HistoryWidgetState extends State<PaymentListWidget> {
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(24, 20, 0, 0),
                         child: Text(
-                          'Payment Record',
+                          'Unfinished payment',
                           textAlign: TextAlign.start,
                           style: FlutterFlowTheme.of(context)
                               .headlineMedium
@@ -127,7 +160,7 @@ class _HistoryWidgetState extends State<PaymentListWidget> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 24),
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
@@ -148,6 +181,36 @@ class _HistoryWidgetState extends State<PaymentListWidget> {
                                           totalPaymentList![index];
                                       return PaymentRecordItem(
                                           bookingRecordInfo: currItem);
+                                    }),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 24),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            totalPaymentList == null
+                                ? Text("Loading")
+                                : ListView.builder(
+                                    padding: EdgeInsets.fromLTRB(
+                                      0,
+                                      8,
+                                      0,
+                                      0,
+                                    ),
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.vertical,
+                                    itemCount: parkingSessionPage
+                                        ?.parkingSessionList!.length,
+                                    itemBuilder: (context, index) {
+                                      ParkingSessionInfo? currItem =
+                                          parkingSessionPage
+                                              ?.parkingSessionList![index];
+                                      if (currItem != null && currItem.exitTime!=null) {
+                                        return ParkingPaymentItem(
+                                            parkingSessionInfo: currItem);
+                                      }
                                     }),
                           ],
                         ),
